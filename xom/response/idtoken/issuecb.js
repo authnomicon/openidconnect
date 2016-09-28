@@ -1,6 +1,6 @@
 exports = module.exports = function(acs) {
   
-  return function issueIDToken(client, user, areq, cb) {
+  return function issueIDToken(client, user, ares, areq, bound, cb) {
     var bound = {
       client: client,
       redirectURI: redirectURI,
@@ -19,5 +19,4 @@ exports = module.exports = function(acs) {
   };
 };
 
-exports['@implements'] = 'http://schemas.modulate.io/js/aaa/oauth2/openid/issueIDTokenFunc';
 exports['@require'] = [ 'http://schemas.modulate.io/js/aaa/oauth2/ACS' ];
