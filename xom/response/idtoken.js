@@ -11,4 +11,5 @@ exports = module.exports = function(issueCb) {
 };
 
 exports['@implements'] = 'http://schema.modulate.io/js/aaa/oauth2/Response';
-exports['@require'] = [ './_code/issuecb' ];
+exports['@type'] = 'id_token';
+exports['@require'] = [ './idtoken/issuecb' ];
