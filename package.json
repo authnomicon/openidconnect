@@ -7,7 +7,8 @@
     "email": "jaredhanson@gmail.com",
     "url": "http://www.jaredhanson.net/"
   },
-  "repository": {    "type": "git",
+  "repository": {
+    "type": "git",
     "url": "git://github.com/authnomicon/nodex-aaa-oauth2-openid.git"
   },
   "bugs": {
@@ -21,10 +22,16 @@
     }
   ],
   "main": "./index.js",
+  "dependencies": {
+    "oauth2orize-openid": "^0.1.1"
+  },
   "devDependencies": {
     "make-node": "^0.3.0",
     "mocha": "^2.0.0",
-    "chai": "^3.0.0"
+    "chai": "^3.0.0",
+    "sinon-chai": "^2.8.0",
+    "proxyquire": "^1.7.0",
+    "sinon": "^1.17.0"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha test/*.test.js"
