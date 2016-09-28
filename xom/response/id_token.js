@@ -1,8 +1,8 @@
 exports = module.exports = function(issueCb) {
-  var oauth2orize = require('oauth2orize');
+  var openid = require('oauth2orize-openid');
   
   // TODO: Make modes pluggable
-  return oauth2orize.grant.code({
+  return openid.grant.idToken({
     modes: {
       form_post: require('oauth2orize-fprm'),
       web_message: require('oauth2orize-wmrm')
@@ -10,5 +10,5 @@ exports = module.exports = function(issueCb) {
   }, issueCb);
 };
 
+exports['@implements'] = 'http://schema.modulate.io/js/aaa/oauth2/Response';
 exports['@require'] = [ './_code/issuecb' ];
-exports['@implements'] = 'http://schemas.modulate.io/js/aaa/oauth2/Response';
