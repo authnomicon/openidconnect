@@ -23,7 +23,7 @@
   ],
   "main": "./index.js",
   "dependencies": {
-    "oauth2orize-openid": "^0.1.1"
+    "oauth2orize-openid": "^0.1.2"
   },
   "devDependencies": {
     "make-node": "^0.3.0",

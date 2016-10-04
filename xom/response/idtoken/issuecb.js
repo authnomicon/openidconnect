@@ -1,6 +1,6 @@
 exports = module.exports = function(acs) {
   
-  return function issueIDToken(client, user, ares, areq, bound, cb) {
+  return function issueIDToken(client, user, ares, areq, bound, locals, cb) {
     // TODO: Include auth_time when max_age is sent
     // TODO: Add nonce if in request
     
