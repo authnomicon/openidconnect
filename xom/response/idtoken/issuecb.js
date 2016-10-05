@@ -1,4 +1,4 @@
-exports = module.exports = function(acs) {
+exports = module.exports = function(Tokens) {
   
   return function issueIDToken(client, user, ares, areq, bound, locals, cb) {
     // TODO: Include auth_time when max_age is sent
@@ -8,7 +8,20 @@ exports = module.exports = function(acs) {
     
     // http://openid.net/specs/openid-connect-core-1_0.html, Section 2
     
+    var type = 'urn:ietf:params:oauth:token-type:id_token';
+    var params = {};
+    params.peer = client;
+    // TODO: Supported algs, etc.
     
+    var claims = {};
+    
+    Tokens.encode(type, claims, params, function(err, token) {
+      if (err) { return cb(err); }
+      
+      return cb(null, token);
+    });
+    
+    /*
     var bound = {
       client: client,
       redirectURI: redirectURI,
@@ -17,7 +30,7 @@ exports = module.exports = function(acs) {
       grant: info.grant,
       scope: ares.scope
     };
-    
+    */
     /*
     acs.store(bound, function(err, code) {
       if (err) { return cb(err); }
@@ -27,4 +40,4 @@ exports = module.exports = function(acs) {
   };
 };
 
-exports['@require'] = [ 'http://schemas.modulate.io/js/aaa/oauth2/ACS' ];
+exports['@require'] = [ 'http://i.bixbyjs.org/tokens' ];
