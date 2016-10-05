@@ -62,7 +62,35 @@ describe('response/idtoken/issuecb', function() {
         });
       });
       
-      it('should yield an access token', function() {
+      it('should call tokens.encode', function() {
+        expect(tokens.encode).to.have.been.calledOnce;
+        var call = tokens.encode.getCall(0);
+        expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
+
+        var claims = call.args[1];
+        var expiresAt = claims.expiresAt;
+        delete claims.expiresAt;
+        
+        expect(call.args[1]).to.deep.equal({
+          subject: '1',
+          authorizedParty: 's6BhdRkqt3',
+          audience: 's6BhdRkqt3'
+        });
+        expect(expiresAt).to.be.an.instanceOf(Date);
+        
+        var expectedExpiresAt = new Date();
+        expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
+        expect(expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
+
+        expect(call.args[2]).to.deep.equal({
+          peer: {
+            id: 's6BhdRkqt3',
+            name: 'Example Client'
+          }
+        });
+      });
+      
+      it('should yield an ID token', function() {
         expect(idToken).to.equal('2YotnFZFEjr1zCsicMWpAA');
       });
     });

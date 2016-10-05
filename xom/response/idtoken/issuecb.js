@@ -13,7 +13,15 @@ exports = module.exports = function(Tokens) {
     params.peer = client;
     // TODO: Supported algs, etc.
     
-    var claims = {};
+    var exp = new Date();
+    exp.setHours(exp.getHours() + 2);
+    
+    var claims = {
+      subject: user.id,
+      authorizedParty: client.id,
+      audience: client.id,
+      expiresAt: exp
+    };
     
     Tokens.encode(type, claims, params, function(err, token) {
       if (err) { return cb(err); }
