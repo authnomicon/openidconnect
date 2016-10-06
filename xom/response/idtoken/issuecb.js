@@ -18,10 +18,16 @@ exports = module.exports = function(Tokens) {
     
     var claims = {
       subject: user.id,
-      authorizedParty: client.id,
       audience: client.id,
+      authorizedParty: client.id,
       expiresAt: exp
     };
+    
+    if (areq.maxAge !== undefined) {
+      claims.authenticatedAt = locals.authenticatedAt;
+    }
+    
+    // TODO: at_hash per section 3.1.3.6
     
     Tokens.encode(type, claims, params, function(err, token) {
       if (err) { return cb(err); }
