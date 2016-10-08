@@ -106,6 +106,71 @@ describe('response/idtoken/issuecb', function() {
       });
     }); // issuing a token
     
+    describe('issuing a token in response to request with nonce', function() {
+      var idToken;
+      
+      before(function() {
+        sinon.stub(tokens, 'encode').yields(null, ID_TOKEN_FROM_SPEC);
+      });
+      
+      after(function() {
+        tokens.encode.restore();
+      });
+      
+      before(function(done) {
+        var ares = {
+          allow: true,
+          access: [ {
+            resource: 'https://api.example.com/',
+            scope: [ 'read:foo', 'write:foo', 'read:bar' ]
+          } ]
+        }
+        var areq = {
+          nonce: 'n-0S6_WzA2Mj'
+        }
+        
+        var issueCb = factory(tokens);
+        issueCb(client, user, ares, areq, undefined, {}, function(e, i) {
+          if (e) { return done(e); }
+          idToken = i;
+          done();
+        });
+      });
+      
+      it('should call tokens.encode', function() {
+        expect(tokens.encode).to.have.been.calledOnce;
+        var call = tokens.encode.getCall(0);
+        expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
+
+        var claims = call.args[1];
+        var expiresAt = claims.expiresAt;
+        delete claims.expiresAt;
+        
+        expect(call.args[1]).to.deep.equal({
+          subject: '1',
+          audience: 's6BhdRkqt3',
+          authorizedParty: 's6BhdRkqt3',
+          nonce: 'n-0S6_WzA2Mj'
+        });
+        
+        expect(expiresAt).to.be.an.instanceOf(Date);
+        var expectedExpiresAt = new Date();
+        expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
+        expect(expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
+
+        expect(call.args[2]).to.deep.equal({
+          peer: {
+            id: 's6BhdRkqt3',
+            name: 'Example Client'
+          }
+        });
+      });
+      
+      it('should yield an ID token', function() {
+        expect(idToken).to.equal(ID_TOKEN_FROM_SPEC);
+      });
+    }); // issuing a token in response to request with nonce
+    
     describe('issuing a token in response to max_age request', function() {
       var idToken;
       

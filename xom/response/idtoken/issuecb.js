@@ -23,6 +23,9 @@ exports = module.exports = function(Tokens) {
       expiresAt: exp
     };
     
+    if (areq.nonce !== undefined) {
+      claims.nonce = areq.nonce;
+    }
     if (areq.maxAge !== undefined) {
       claims.authenticatedAt = locals.authenticatedAt;
     }
