@@ -21,7 +21,7 @@
       "url": "http://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./index.js",
+  "main": "./app",
   "dependencies": {
     "oauth2orize-openid": "^0.1.2"
   },
