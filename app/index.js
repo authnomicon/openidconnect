@@ -1,10 +1,11 @@
 exports = module.exports = {
-  //'response/idtoken': require('./xom/response/idtoken'),
+  'implicit/idtoken': require('./implicit/idtoken'),
+  'implicit/idtokentoken': require('./implicit/idtokentoken'),
 };
 
 exports.load = function(id) {
   try {
-    return require('./app/' + id);
+    return require('./' + id);
   } catch (ex) {
     if (ex.code == 'MODULE_NOT_FOUND') { return; }
     throw ex;
