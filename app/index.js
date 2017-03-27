@@ -3,7 +3,8 @@ exports = module.exports = {
   'implicit/idtokentoken': require('./implicit/idtokentoken'),
   'hybrid/codeidtoken': require('./hybrid/codeidtoken'),
   'hybrid/codetoken': require('./hybrid/codetoken'),
-  'hybrid/codeidtokentoken': require('./hybrid/codeidtokentoken')
+  'hybrid/codeidtokentoken': require('./hybrid/codeidtokentoken'),
+  'ext/openid': require('./ext/openid')
 };
 
 exports.load = function(id) {
