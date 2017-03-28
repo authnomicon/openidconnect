@@ -8,6 +8,23 @@ exports = module.exports = function(Tokens) {
     
     // http://openid.net/specs/openid-connect-core-1_0.html, Section 2
     
+    var ctx = {};
+    ctx.user = user;
+    ctx.client = client;
+    //ctx.audience = [ client ];
+    // TODO: scope
+    
+    Tokens.cipher(ctx, { type: 'application/jwt', dialect: 'urn:ietf:params:oauth:token-type:id_token' }, function(err, token) {
+      if (err) { return cb(err); }
+      return cb(null, token);
+    });
+    
+    
+    
+    return;
+    
+    // TODO: Reimplement below here.
+    
     var type = 'urn:ietf:params:oauth:token-type:id_token';
     var params = {};
     params.peer = client;
