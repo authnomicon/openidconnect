@@ -5,6 +5,7 @@ exports = module.exports = {
   'hybrid/codeidtoken': require('./hybrid/codeidtoken'),
   'hybrid/codetoken': require('./hybrid/codetoken'),
   'hybrid/codeidtokentoken': require('./hybrid/codeidtokentoken'),
+  'tokens/id/interpret': require('./tokens/id/interpret'),
   'tokens/id/translate': require('./tokens/id/translate')
 };
 
