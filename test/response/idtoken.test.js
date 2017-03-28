@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../xom/response/idtoken');
+var factory = require('../../app/implicit/idtoken');
 
 
 describe('response/idtoken', function() {

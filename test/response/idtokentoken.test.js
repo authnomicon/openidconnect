@@ -2,10 +2,10 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../xom/response/idtokentoken');
+var factory = require('../../app/implicit/idtokentoken');
 
 
-describe('response/idtokentoken', function() {
+describe('implicit/idtokentoken', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
