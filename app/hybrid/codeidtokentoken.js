@@ -20,7 +20,7 @@ exports = module.exports = function(container, issueIdToken, issueToken, issueCo
         }
         
         modes[name] = mode;
-        logger.info('Loaded response mode for OpenID Connect implicit \"code id_token token\" flow: ' + name);
+        logger.info('Loaded response mode for OpenID Connect hybrid \"code id_token token\" flow: ' + name);
       });
       
       return openid.grant.codeIdTokenToken({
