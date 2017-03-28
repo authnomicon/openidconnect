@@ -14,63 +14,26 @@ exports = module.exports = function(Tokens) {
     //ctx.audience = [ client ];
     // TODO: scope
     
+    // TODO: What is the best policy here?
+    var exp = new Date();
+    exp.setHours(exp.getHours() + 2);
+    ctx.expiresAt = exp;
+    
+    if (areq.nonce !== undefined) {
+      ctx.nonce = areq.nonce;
+    }
+    // TODO: Handle maxAge
+    /*
+    if (areq.maxAge !== undefined) {
+      claims.authenticatedAt = locals.authenticatedAt;
+    }
+    */
+    // TODO: at_hash per section 3.1.3.6
+    
     Tokens.cipher(ctx, { type: 'application/jwt', dialect: 'urn:ietf:params:oauth:token-type:id_token' }, function(err, token) {
       if (err) { return cb(err); }
       return cb(null, token);
     });
-    
-    
-    
-    return;
-    
-    // TODO: Reimplement below here.
-    
-    var type = 'urn:ietf:params:oauth:token-type:id_token';
-    var params = {};
-    params.peer = client;
-    // TODO: Supported algs, etc.
-    
-    var exp = new Date();
-    exp.setHours(exp.getHours() + 2);
-    
-    var claims = {
-      subject: user.id,
-      audience: client.id,
-      authorizedParty: client.id,
-      expiresAt: exp
-    };
-    
-    if (areq.nonce !== undefined) {
-      claims.nonce = areq.nonce;
-    }
-    if (areq.maxAge !== undefined) {
-      claims.authenticatedAt = locals.authenticatedAt;
-    }
-    
-    // TODO: at_hash per section 3.1.3.6
-    
-    Tokens.encode(type, claims, params, function(err, token) {
-      if (err) { return cb(err); }
-      
-      return cb(null, token);
-    });
-    
-    /*
-    var bound = {
-      client: client,
-      redirectURI: redirectURI,
-      user: user,
-      service: info.service,
-      grant: info.grant,
-      scope: ares.scope
-    };
-    */
-    /*
-    acs.store(bound, function(err, code) {
-      if (err) { return cb(err); }
-      return cb(null, code);
-    });
-    */
   };
 };
 

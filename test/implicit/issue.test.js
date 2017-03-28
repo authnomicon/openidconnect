@@ -67,8 +67,8 @@ describe('implicit/idtoken/issue', function() {
           } ]
         }
         
-        var issueCb = factory(tokens);
-        issueCb(client, user, ares, {}, undefined, {}, function(e, i) {
+        var issue = factory(tokens);
+        issue(client, user, ares, {}, undefined, {}, function(e, i) {
           if (e) { return done(e); }
           idToken = i;
           done();
@@ -79,36 +79,30 @@ describe('implicit/idtoken/issue', function() {
         expect(tokens.cipher).to.have.been.calledOnce;
         var call = tokens.cipher.getCall(0);
         
+        
+        var ctx = call.args[0];
+        expect(Object.keys(ctx)).to.have.length(3);
+        // user
+        expect(ctx.user).to.deep.equal({
+          id: '1',
+          displayName: 'John Doe'
+        });
+        // client
+        expect(ctx.client).to.deep.equal({
+          id: 's6BhdRkqt3',
+          displayName: 'Photofly'
+        });
+        // expiresAt
+        expect(ctx.expiresAt).to.be.an.instanceOf(Date);
+        var expectedExpiresAt = new Date();
+        expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
+        expect(ctx.expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
+        
+        
         expect(call.args[1]).to.deep.equal({
           type: 'application/jwt',
           dialect: 'urn:ietf:params:oauth:token-type:id_token'
         });
-        
-        /*
-        expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
-
-        var claims = call.args[1];
-        var expiresAt = claims.expiresAt;
-        delete claims.expiresAt;
-        
-        expect(call.args[1]).to.deep.equal({
-          subject: '1',
-          audience: 's6BhdRkqt3',
-          authorizedParty: 's6BhdRkqt3'
-        });
-        
-        expect(expiresAt).to.be.an.instanceOf(Date);
-        var expectedExpiresAt = new Date();
-        expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
-        expect(expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
-
-        expect(call.args[2]).to.deep.equal({
-          peer: {
-            id: 's6BhdRkqt3',
-            name: 'Example Client'
-          }
-        });
-        */
       });
       
       it('should yield an ID token', function() {
@@ -142,44 +136,44 @@ describe('implicit/idtoken/issue', function() {
           nonce: 'n-0S6_WzA2Mj'
         }
         
-        var issueCb = factory(tokens);
-        issueCb(client, user, ares, areq, undefined, {}, function(e, i) {
+        var issue = factory(tokens);
+        issue(client, user, ares, areq, undefined, {}, function(e, i) {
           if (e) { return done(e); }
           idToken = i;
           done();
         });
       });
       
-      it('should call tokens.cipher', function() {
+      it('should cipher context', function() {
         expect(tokens.cipher).to.have.been.calledOnce;
         var call = tokens.cipher.getCall(0);
         
-        /*
-        expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
-
-        var claims = call.args[1];
-        var expiresAt = claims.expiresAt;
-        delete claims.expiresAt;
         
-        expect(call.args[1]).to.deep.equal({
-          subject: '1',
-          audience: 's6BhdRkqt3',
-          authorizedParty: 's6BhdRkqt3',
-          nonce: 'n-0S6_WzA2Mj'
+        var ctx = call.args[0];
+        expect(Object.keys(ctx)).to.have.length(4);
+        // user
+        expect(ctx.user).to.deep.equal({
+          id: '1',
+          displayName: 'John Doe'
         });
-        
-        expect(expiresAt).to.be.an.instanceOf(Date);
+        // client
+        expect(ctx.client).to.deep.equal({
+          id: 's6BhdRkqt3',
+          displayName: 'Photofly'
+        });
+        // expiresAt
+        expect(ctx.expiresAt).to.be.an.instanceOf(Date);
         var expectedExpiresAt = new Date();
         expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
-        expect(expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
-
-        expect(call.args[2]).to.deep.equal({
-          peer: {
-            id: 's6BhdRkqt3',
-            name: 'Example Client'
-          }
+        expect(ctx.expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
+        // nonce
+        expect(ctx.nonce).to.equal('n-0S6_WzA2Mj');
+        
+        
+        expect(call.args[1]).to.deep.equal({
+          type: 'application/jwt',
+          dialect: 'urn:ietf:params:oauth:token-type:id_token'
         });
-        */
       });
       
       it('should yield an ID token', function() {
@@ -216,55 +210,56 @@ describe('implicit/idtoken/issue', function() {
           authenticatedAt: new Date(2016, 10, 5, 8, 10)
         }
         
-        var issueCb = factory(tokens);
-        issueCb(client, user, ares, areq, undefined, locals, function(e, i) {
+        var issue = factory(tokens);
+        issue(client, user, ares, areq, undefined, locals, function(e, i) {
           if (e) { return done(e); }
           idToken = i;
           done();
         });
       });
       
-      it('should call tokens.cipher', function() {
+      it('should cipher context', function() {
         expect(tokens.cipher).to.have.been.calledOnce;
         var call = tokens.cipher.getCall(0);
-        /*
-        expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
-
-        var claims = call.args[1];
-        var expiresAt = claims.expiresAt;
-        delete claims.expiresAt;
-        var authenticatedAt = claims.authenticatedAt;
-        delete claims.authenticatedAt;
         
-        expect(call.args[1]).to.deep.equal({
-          subject: '1',
-          audience: 's6BhdRkqt3',
-          authorizedParty: 's6BhdRkqt3'
+        
+        var ctx = call.args[0];
+        expect(Object.keys(ctx)).to.have.length(3);
+        // user
+        expect(ctx.user).to.deep.equal({
+          id: '1',
+          displayName: 'John Doe'
         });
-        
-        expect(expiresAt).to.be.an.instanceOf(Date);
+        // client
+        expect(ctx.client).to.deep.equal({
+          id: 's6BhdRkqt3',
+          displayName: 'Photofly'
+        });
+        // expiresAt
+        expect(ctx.expiresAt).to.be.an.instanceOf(Date);
         var expectedExpiresAt = new Date();
         expectedExpiresAt.setHours(expectedExpiresAt.getHours() + 2);
-        expect(expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
+        expect(ctx.expiresAt).to.be.closeToDate(expectedExpiresAt, 2, 'seconds');
         
+        
+        /*
         expect(authenticatedAt).to.be.an.instanceOf(Date);
         var expectedAuthenticatedAt = new Date(2016, 10, 5, 8, 10);
         expect(authenticatedAt).to.be.closeToDate(expectedAuthenticatedAt);
-
-        expect(call.args[2]).to.deep.equal({
-          peer: {
-            id: 's6BhdRkqt3',
-            name: 'Example Client'
-          }
-        });
         */
+        
+        
+        expect(call.args[1]).to.deep.equal({
+          type: 'application/jwt',
+          dialect: 'urn:ietf:params:oauth:token-type:id_token'
+        });
       });
       
       it('should yield an ID token', function() {
         expect(idToken).to.equal(IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
-    }); // issuing a token
+    }); // issuing a token in response to max_age request
     
-  });
+  }); // issue
   
 });
