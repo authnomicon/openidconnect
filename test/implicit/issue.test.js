@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var factory = require('../../app/implicit/issue');
 
-var ID_TOKEN_FROM_SPEC = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjFlOWdkazcifQ.ewogImlzc\
+var IDTOKEN_OIDC_CORE_SECTION_3_1_3_3 = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjFlOWdkazcifQ.ewogImlzc\
 yI6ICJodHRwOi8vc2VydmVyLmV4YW1wbGUuY29tIiwKICJzdWIiOiAiMjQ4Mjg5\
 NzYxMDAxIiwKICJhdWQiOiAiczZCaGRSa3F0MyIsCiAibm9uY2UiOiAibi0wUzZ\
 fV3pBMk1qIiwKICJleHAiOiAxMzExMjgxOTcwLAogImlhdCI6IDEzMTEyODA5Nz\
@@ -16,7 +16,7 @@ K5hoDalrcvRYLSrQAZZKflyuVCyixEoV9GfNQC3_osjzw2PAithfubEEBLuVVk4\
 XUVrWOLrLl0nx7RkKU8NXNHq-rvKMzqg'
 
 
-describe('response/idtoken/issuecb', function() {
+describe('implicit/idtoken/issue', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
@@ -30,10 +30,10 @@ describe('response/idtoken/issuecb', function() {
     });
   });
   
-  describe.skip('issueCb', function() {
+  describe('issue', function() {
     var client = {
       id: 's6BhdRkqt3',
-      name: 'Example Client'
+      displayName: 'Photofly'
     }
     var user = {
       id: '1',
@@ -41,25 +41,27 @@ describe('response/idtoken/issuecb', function() {
     };
     
     var tokens = {
-      encode: function(){},
-      negotiate: function(){}
+      cipher: function(){}
     };
     
     describe('issuing a token', function() {
       var idToken;
       
       before(function() {
-        sinon.stub(tokens, 'encode').yields(null, ID_TOKEN_FROM_SPEC);
+        sinon.stub(tokens, 'cipher').yields(null, IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
       
       after(function() {
-        tokens.encode.restore();
+        tokens.cipher.restore();
       });
       
       before(function(done) {
         var ares = {
           allow: true,
-          access: [ {
+          identity: {
+            scope: [ 'profile' ]
+          },
+          permissions: [ {
             resource: 'https://api.example.com/',
             scope: [ 'read:foo', 'write:foo', 'read:bar' ]
           } ]
@@ -73,9 +75,16 @@ describe('response/idtoken/issuecb', function() {
         });
       });
       
-      it('should call tokens.encode', function() {
-        expect(tokens.encode).to.have.been.calledOnce;
-        var call = tokens.encode.getCall(0);
+      it('should cipher context', function() {
+        expect(tokens.cipher).to.have.been.calledOnce;
+        var call = tokens.cipher.getCall(0);
+        
+        expect(call.args[1]).to.deep.equal({
+          type: 'application/jwt',
+          dialect: 'urn:ietf:params:oauth:token-type:id_token'
+        });
+        
+        /*
         expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
 
         var claims = call.args[1];
@@ -99,10 +108,11 @@ describe('response/idtoken/issuecb', function() {
             name: 'Example Client'
           }
         });
+        */
       });
       
       it('should yield an ID token', function() {
-        expect(idToken).to.equal(ID_TOKEN_FROM_SPEC);
+        expect(idToken).to.equal(IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
     }); // issuing a token
     
@@ -110,17 +120,20 @@ describe('response/idtoken/issuecb', function() {
       var idToken;
       
       before(function() {
-        sinon.stub(tokens, 'encode').yields(null, ID_TOKEN_FROM_SPEC);
+        sinon.stub(tokens, 'cipher').yields(null, IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
       
       after(function() {
-        tokens.encode.restore();
+        tokens.cipher.restore();
       });
       
       before(function(done) {
         var ares = {
           allow: true,
-          access: [ {
+          identity: {
+            scope: [ 'profile' ]
+          },
+          permissions: [ {
             resource: 'https://api.example.com/',
             scope: [ 'read:foo', 'write:foo', 'read:bar' ]
           } ]
@@ -137,9 +150,11 @@ describe('response/idtoken/issuecb', function() {
         });
       });
       
-      it('should call tokens.encode', function() {
-        expect(tokens.encode).to.have.been.calledOnce;
-        var call = tokens.encode.getCall(0);
+      it('should call tokens.cipher', function() {
+        expect(tokens.cipher).to.have.been.calledOnce;
+        var call = tokens.cipher.getCall(0);
+        
+        /*
         expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
 
         var claims = call.args[1];
@@ -164,10 +179,11 @@ describe('response/idtoken/issuecb', function() {
             name: 'Example Client'
           }
         });
+        */
       });
       
       it('should yield an ID token', function() {
-        expect(idToken).to.equal(ID_TOKEN_FROM_SPEC);
+        expect(idToken).to.equal(IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
     }); // issuing a token in response to request with nonce
     
@@ -175,21 +191,24 @@ describe('response/idtoken/issuecb', function() {
       var idToken;
       
       before(function() {
-        sinon.stub(tokens, 'encode').yields(null, ID_TOKEN_FROM_SPEC);
+        sinon.stub(tokens, 'cipher').yields(null, IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
       
       after(function() {
-        tokens.encode.restore();
+        tokens.cipher.restore();
       });
       
       before(function(done) {
         var ares = {
           allow: true,
-          access: [ {
+          identity: {
+            scope: [ 'profile' ]
+          },
+          permissions: [ {
             resource: 'https://api.example.com/',
             scope: [ 'read:foo', 'write:foo', 'read:bar' ]
           } ]
-        };
+        }
         var areq = {
           maxAge: 3600
         }
@@ -205,9 +224,10 @@ describe('response/idtoken/issuecb', function() {
         });
       });
       
-      it('should call tokens.encode', function() {
-        expect(tokens.encode).to.have.been.calledOnce;
-        var call = tokens.encode.getCall(0);
+      it('should call tokens.cipher', function() {
+        expect(tokens.cipher).to.have.been.calledOnce;
+        var call = tokens.cipher.getCall(0);
+        /*
         expect(call.args[0]).to.equal('urn:ietf:params:oauth:token-type:id_token');
 
         var claims = call.args[1];
@@ -237,10 +257,11 @@ describe('response/idtoken/issuecb', function() {
             name: 'Example Client'
           }
         });
+        */
       });
       
       it('should yield an ID token', function() {
-        expect(idToken).to.equal(ID_TOKEN_FROM_SPEC);
+        expect(idToken).to.equal(IDTOKEN_OIDC_CORE_SECTION_3_1_3_3);
       });
     }); // issuing a token
     
