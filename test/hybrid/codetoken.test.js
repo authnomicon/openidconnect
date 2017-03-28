@@ -5,10 +5,15 @@ var sinon = require('sinon');
 var factory = require('../../app/hybrid/codetoken');
 
 
-describe('response/codetoken', function() {
+describe('hybrid/codetoken', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
+  });
+  
+  it('should be annotated', function() {
+    expect(factory['@implements']).to.equal('http://schemas.authnomicon.org/js/aaa/oauth2/grant');
+    expect(factory['@type']).to.equal('code token');
   });
   
 });
