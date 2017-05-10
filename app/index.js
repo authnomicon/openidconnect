@@ -1,3 +1,4 @@
+/*
 exports = module.exports = {
   'ext/openid': require('./ext/openid'),
   'implicit/idtoken': require('./implicit/idtoken'),
@@ -8,8 +9,10 @@ exports = module.exports = {
   'tokens/id/interpret': require('./tokens/id/interpret'),
   'tokens/id/translate': require('./tokens/id/translate')
 };
+*/
 
-exports.load = function(id) {
+
+exports = module.exports = function(id) {
   try {
     return require('./' + id);
   } catch (ex) {

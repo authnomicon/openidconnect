@@ -22,6 +22,19 @@
     }
   ],
   "main": "./app",
+  "assembly": {
+    "namespace": "oauth2/openid",
+    "components": [
+      "ext/openid",
+      "implicit/idtoken",
+      "implicit/idtokentoken",
+      "hybrid/codeidtoken",
+      "hybrid/codetoken",
+      "hybrid/codeidtokentoken",
+      "tokens/id/interpret",
+      "tokens/id/translate"
+    ]
+  },
   "dependencies": {
     "ejs": "^2.5.6",
     "oauth2orize-openid": "^0.1.2"
