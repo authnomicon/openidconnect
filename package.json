@@ -25,6 +25,7 @@
   "assembly": {
     "namespace": "oauth2/openid",
     "components": [
+      "http/session",
       "ext/openid",
       "implicit/idtoken",
       "implicit/idtokentoken",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "ejs": "^2.5.6",
+    "express": "^4.15.3",
     "oauth2orize-openid": "^0.1.2"
   },
   "devDependencies": {
