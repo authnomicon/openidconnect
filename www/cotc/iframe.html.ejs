@@ -1,0 +1,41 @@
+<head>
+  <title>Verify Iframe</title>
+</head>
+<body>
+  <script type="text/javascript">
+    function getFragment(name) {
+      var value = "&" + window.location.hash.substring(1);
+      var parts = value.split("&" + name + "=");
+      if (parts.length == 2) return parts.pop().split("&").shift();
+    }
+    
+    (function(window) {
+      // TODO: Get origin from param
+      var origin = decodeURIComponent(getFragment('origin'))
+        , key, verifier;
+      
+      window.addEventListener('message', function(evt) {
+        switch (evt.data.type) {
+        case 'co_verifier_request':
+          key = [ 'co/verifier',
+            encodeURIComponent(evt.origin),
+            encodeURIComponent(evt.data.request.id)
+          ].join('/');
+          
+          verifier = sessionStorage.getItem(key);
+          sessionStorage.removeItem(key)
+          
+          event.source.postMessage({
+            type: 'co_verifier_response',
+            response: {
+              verifier: verifier
+            }
+          }, evt.origin);
+          break;
+        }
+      });
+      
+      window.parent.postMessage({ type: 'ready' }, origin);
+    })(this);
+  </script>
+</body>
