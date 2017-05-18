@@ -8,7 +8,7 @@ exports = module.exports = function(checkHandler, endHandler) {
   return router;
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/aaa/oauth2/openid/http/SessionManagementService';
+exports['@implements'] = 'http://schemas.authnomicon.org/js/oidc/http/SessionManagementService';
 exports['@require'] = [
   '../handlers/session/check',
   '../handlers/session/end'
