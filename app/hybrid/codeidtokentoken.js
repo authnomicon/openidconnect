@@ -1,13 +1,13 @@
 exports = module.exports = function(container, issueIdToken, issueToken, issueCode, logger) {
   var openid = require('oauth2orize-openid');
   
-  var modeDecls = container.specs('http://schemas.authnomicon.org/js/aaa/oauth2/response/mode');
-  return Promise.all(modeDecls.map(function(spec) { return container.create(spec.id); } ))
+  var modeComps = container.components('http://schemas.authnomicon.org/js/aaa/oauth2/response/mode');
+  return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
         , name;
       plugins.forEach(function(mode, i) {
-        name = modeDecls[i].a['@mode'];
+        name = modeComps[i].a['@mode'];
         if (name == 'query') {
           // The default response mode of this response type is the fragment
           // encoding.  In accordance with security considerations, this
