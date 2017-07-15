@@ -29,7 +29,7 @@ exports = module.exports = function(container, issueToken, issueCode, logger) {
     });
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/aaa/oauth2/grant';
+exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/responseType';
 exports['@type'] = 'code token';
 exports['@require'] = [
   '!container',
