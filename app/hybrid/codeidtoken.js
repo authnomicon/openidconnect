@@ -1,7 +1,7 @@
 exports = module.exports = function(container, issueIdToken, issueCode, logger) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://schemas.authnomicon.org/js/aaa/oauth2/response/mode');
+  var modeComps = container.components('http://schemas.authnomicon.org/js/oauth2/responseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
