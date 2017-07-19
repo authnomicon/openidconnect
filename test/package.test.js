@@ -1,23 +1,32 @@
 /* global describe, it, expect */
 
 var expect = require('chai').expect;
-var pkg = require('..');
 
 
-describe('@authnomicon/aaa-oauth2-openid', function() {
+describe('@authnomicon/oauth2-openid', function() {
   
-  it('should export manifest', function() {
-    expect(pkg).to.be.an('object');
-    expect(Object.keys(pkg)).to.have.length(9);
+  describe('package.json', function() {
+    var json = require('../package.json');
     
-    expect(pkg['ext/openid']).to.be.a('function');
-    expect(pkg['implicit/idtoken']).to.be.a('function');
-    expect(pkg['implicit/idtokentoken']).to.be.a('function');
-    expect(pkg['hybrid/codeidtoken']).to.be.a('function');
-    expect(pkg['hybrid/codetoken']).to.be.a('function');
-    expect(pkg['hybrid/codeidtokentoken']).to.be.a('function');
-    expect(pkg['tokens/id/interpret']).to.be.a('function');
-    expect(pkg['tokens/id/translate']).to.be.a('function');
+    it('should have assembly metadata', function() {
+      expect(json.assembly.namespace).to.equal('oauth2/openid');
+      
+      expect(json.assembly.components).to.have.length(9);
+      expect(json.assembly.components).to.include('ext/openid');
+      expect(json.assembly.components).to.include('implicit/idtoken');
+      expect(json.assembly.components).to.include('implicit/idtokentoken');
+      expect(json.assembly.components).to.include('hybrid/codeidtoken');
+      expect(json.assembly.components).to.include('hybrid/codetoken');
+      expect(json.assembly.components).to.include('hybrid/codeidtokentoken');
+      expect(json.assembly.components).to.include('tokens/id/interpret');
+      expect(json.assembly.components).to.include('tokens/id/translate');
+    });
+  });
+  
+  it('should throw if required', function() {
+    expect(function() {
+      var pkg = require('..');
+    }).to.throw(Error).with.property('code', 'MODULE_NOT_FOUND');
   });
   
 });
