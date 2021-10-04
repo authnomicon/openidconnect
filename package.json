@@ -24,6 +24,9 @@
   "main": "./app",
   "assembly": {
     "namespace": "oauth2/openid",
+    "components": [
+      "http/userinfo/service"
+    ],
     "x_components": [
       "http/session",
       "ext/openid",
