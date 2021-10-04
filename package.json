@@ -1,5 +1,5 @@
 {
-  "name": "@authnomicon/aaa-oauth2-openid",
+  "name": "@authnomicon/openidconnect",
   "version": "0.0.0",
   "description": "TODO",
   "author": {
@@ -24,7 +24,7 @@
   "main": "./app",
   "assembly": {
     "namespace": "oauth2/openid",
-    "components": [
+    "x_components": [
       "http/session",
       "ext/openid",
       "implicit/idtoken",
