@@ -34,7 +34,7 @@
   "assembly": {
     "namespace": "oauth2/openid",
     "components": [
-      "http/userinfo/service"
+      "userinfo/http/service"
     ],
     "x_components": [
       "http/session",
