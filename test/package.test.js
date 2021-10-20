@@ -11,7 +11,8 @@ describe('@authnomicon/oauth2-openid', function() {
     it('should have assembly metadata', function() {
       expect(json.assembly.namespace).to.equal('oauth2/openid');
       
-      expect(json.assembly.components).to.have.length(9);
+      expect(json.assembly.components).to.have.length(1);
+      /*
       expect(json.assembly.components).to.include('ext/openid');
       expect(json.assembly.components).to.include('implicit/idtoken');
       expect(json.assembly.components).to.include('implicit/idtokentoken');
@@ -20,6 +21,7 @@ describe('@authnomicon/oauth2-openid', function() {
       expect(json.assembly.components).to.include('hybrid/codeidtokentoken');
       expect(json.assembly.components).to.include('tokens/id/interpret');
       expect(json.assembly.components).to.include('tokens/id/translate');
+      */
     });
   });
   
