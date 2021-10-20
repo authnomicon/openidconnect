@@ -21,5 +21,5 @@ exports = module.exports = function(authenticate, users) {
 
 exports['@require'] = [
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.authnomicon.org/ds/UserDirectory'
+  'http://i.authnomicon.org/Directory'
 ];
