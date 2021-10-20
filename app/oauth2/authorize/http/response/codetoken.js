@@ -1,7 +1,7 @@
-exports = module.exports = function(container, issueToken, issueCode, logger) {
+exports = module.exports = function(container, ats, acs, logger) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://schemas.authnomicon.org/js/oauth2/responseMode');
+  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -25,15 +25,38 @@ exports = module.exports = function(container, issueToken, issueCode, logger) {
       
       return openid.grant.codeToken({
         modes: modes
-      }, issueToken, issueCode);
+      }, function(client, user, ares, areq, locals, cb) {
+        var msg = {};
+        msg.client = client;
+        msg.user = user;
+        msg.grant = ares;
+        // TODO: Pass some indicator that this is an implicit flow, so token lifetimes
+        //. can be constrained accordingly
+        
+        ats.issue(msg, function(err, token) {
+          if (err) { return cb(err); }
+          return cb(null, token);
+        });
+      }, function(client, redirectURI, user, ares, areq, locals, cb) {
+        var msg = {};
+        msg.client = client;
+        msg.redirectURI = redirectURI;
+        msg.user = user;
+        msg.grant = ares;
+        
+        acs.issue(msg, function(err, code) {
+          if (err) { return cb(err); }
+          return cb(null, code);
+        });
+      });
     });
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/responseType';
+exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'code token';
 exports['@require'] = [
   '!container',
-  'http://schemas.authnomicon.org/js/aaa/oauth2/issueTokenFunc',
-  'http://schemas.authnomicon.org/js/aaa/oauth2/issueCodeFunc',
+  'http://i.authnomicon.org/oauth2/AccessTokenService',
+  'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
   'http://i.bixbyjs.org/Logger'
 ];
