@@ -13,6 +13,7 @@ describe('@authnomicon/oauth2-openid', function() {
       expect(json.assembly.components).to.deep.equal([
         'oauth2/authorize/http/request/openid',
         'oauth2/authorize/http/response/idtoken',
+        'oauth2/authorize/http/response/idtokentoken',
         'userinfo/http/service'
       ]);
     });

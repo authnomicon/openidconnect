@@ -1,7 +1,7 @@
-exports = module.exports = function(container, issueIdToken, issueToken, logger) {
+exports = module.exports = function(container, idts, ats, logger) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://schemas.authnomicon.org/js/oauth2/responseMode');
+  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -25,15 +25,36 @@ exports = module.exports = function(container, issueIdToken, issueToken, logger)
       
       return openid.grant.idTokenToken({
         modes: modes
-      }, issueToken, issueIdToken);
+      }, function(client, user, ares, areq, locals, cb) {
+        var msg = {};
+        msg.client = client;
+        msg.user = user;
+        msg.grant = ares;
+        // TODO: Pass some indicator that this is an implicit flow, so token lifetimes
+        //. can be constrained accordingly
+        
+        ats.issue(msg, function(err, token) {
+          if (err) { return cb(err); }
+          return cb(null, token);
+        });
+      }, function(client, user, ares, areq, bound, locals, cb) {
+        var msg = {};
+        msg.client = client;
+        msg.user = user;
+        
+        idts.issue(msg, function(err, token) {
+          if (err) { return cb(err); }
+          return cb(null, token);
+        });
+      });
     });
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/responseType';
+exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'id_token token';
 exports['@require'] = [
   '!container',
-  './issue',
-  'http://schemas.authnomicon.org/js/aaa/oauth2/issueTokenFunc',
+  '../../../../idtokenservice',
+  'http://i.authnomicon.org/oauth2/AccessTokenService',
   'http://i.bixbyjs.org/Logger'
 ];
