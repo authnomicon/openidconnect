@@ -1,7 +1,7 @@
-exports = module.exports = function(container, issue, logger) {
+exports = module.exports = function(container, idts, logger) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://schemas.authnomicon.org/js/oauth2/responseMode');
+  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -25,14 +25,23 @@ exports = module.exports = function(container, issue, logger) {
       
       return openid.grant.idToken({
         modes: modes
-      }, issue);
+      }, function(client, user, ares, areq, bound, locals, cb) {
+        var msg = {};
+        msg.client = client;
+        msg.user = user;
+        
+        idts.issue(msg, function(err, token) {
+          if (err) { return cb(err); }
+          return cb(null, token);
+        });
+      });
     });
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/responseType';
+exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'id_token';
 exports['@require'] = [
   '!container',
-  './issue',
+  '../../../../idtokenservice',
   'http://i.bixbyjs.org/Logger'
 ];

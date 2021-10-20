@@ -32,8 +32,10 @@
   ],
   "main": "./app",
   "assembly": {
-    "namespace": "oauth2/openid",
+    "namespace": "org.authnomicon/openidconnect",
     "components": [
+      "oauth2/authorize/http/request/openid",
+      "oauth2/authorize/http/response/idtoken",
       "userinfo/http/service"
     ],
     "x_components": [

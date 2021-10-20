@@ -9,19 +9,12 @@ describe('@authnomicon/oauth2-openid', function() {
     var json = require('../package.json');
     
     it('should have assembly metadata', function() {
-      expect(json.assembly.namespace).to.equal('oauth2/openid');
-      
-      expect(json.assembly.components).to.have.length(1);
-      /*
-      expect(json.assembly.components).to.include('ext/openid');
-      expect(json.assembly.components).to.include('implicit/idtoken');
-      expect(json.assembly.components).to.include('implicit/idtokentoken');
-      expect(json.assembly.components).to.include('hybrid/codeidtoken');
-      expect(json.assembly.components).to.include('hybrid/codetoken');
-      expect(json.assembly.components).to.include('hybrid/codeidtokentoken');
-      expect(json.assembly.components).to.include('tokens/id/interpret');
-      expect(json.assembly.components).to.include('tokens/id/translate');
-      */
+      expect(json.assembly.namespace).to.equal('org.authnomicon/openidconnect');
+      expect(json.assembly.components).to.deep.equal([
+        'oauth2/authorize/http/request/openid',
+        'oauth2/authorize/http/response/idtoken',
+        'userinfo/http/service'
+      ]);
     });
   });
   
