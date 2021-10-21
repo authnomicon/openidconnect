@@ -16,6 +16,7 @@ describe('@authnomicon/oauth2-openid', function() {
         'oauth2/authorize/http/response/codetoken',
         'oauth2/authorize/http/response/codeidtoken',
         'oauth2/authorize/http/response/idtokentoken',
+        'oauth2/authorize/http/response/codeidtokentoken',
         'userinfo/http/service'
       ]);
     });
