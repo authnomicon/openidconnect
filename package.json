@@ -41,18 +41,10 @@
       "oauth2/authorize/http/response/idtokentoken",
       "oauth2/authorize/http/response/codeidtokentoken",
       "userinfo/http/service"
-    ],
-    "x_components": [
-      "http/session",
-      "ext/openid",
-      "implicit/idtoken",
-      "implicit/idtokentoken",
-      "hybrid/codeidtoken",
-      "hybrid/codetoken",
-      "hybrid/codeidtokentoken",
-      "tokens/id/interpret",
-      "tokens/id/translate"
     ]
+  },
+  "directories": {
+    "com": "com"
   },
   "dependencies": {
     "ejs": "^2.5.6",
