@@ -1,17 +1,12 @@
-exports = module.exports = function(IoC) {
+exports = module.exports = function(C) {
   
-  
-  return IoC.create('http://i.authnomicon.org/openidconnect/IDTokenService')
-    .catch(function(err) {
+  return C.create('http://i.authnomicon.org/openidconnect/IDTokenService')
+    .catch(function(error) {
+      if (error.code == 'IMPLEMENTATION_NOT_FOUND' && error.interface == 'http://i.authnomicon.org/openidconnect/IDTokenService') {
+        return C.create('./id/default');
+      }
       
-      return {
-        issue: function(ctx, cb) {
-          console.log('TODO: issue ID token...');
-          console.log(ctx);
-          
-          return cb(null, 'TODO-id_token');
-        }
-      };
+      throw error;
     });
 };
 
