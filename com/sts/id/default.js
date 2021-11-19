@@ -1,4 +1,4 @@
-exports = module.exports = function(jwt) {
+exports = module.exports = function(vault, jwt) {
   
   return {
     issue: function(msg, cb) {
@@ -12,15 +12,20 @@ exports = module.exports = function(jwt) {
       if (msg.issued) { claims.iat = Math.floor(msg.issued.valueOf() / 1000); }
       else { claims.iat = Math.floor(Date.now() / 1000); }
       
-      jwt.sign(claims, function(err, token) {
+      vault.get(function(err, publicKey, privateKey) {
         if (err) { return cb(err); }
-        return cb(null, token);
+        
+        jwt.sign(claims, privateKey, function(err, token) {
+          if (err) { return cb(err); }
+          return cb(null, token);
+        });
       });
     }
-  }
+  };
 };
 
 exports['@singleton'] = true;
 exports['@require'] = [
+  'http://i.authnomicon.org/openidconnect/credentials/KeyVault',
   'http://i.bixbyjs.org/jose/jwt'
 ];
