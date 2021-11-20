@@ -10,8 +10,13 @@ exports = module.exports = function(authenticate, users) {
           sub: user.id
         };
         
-        claims.name = user.displayName;
-        claims.preferred_username = user.username;
+        if (user.username) { claims.preferred_username = user.username; }
+        if (user.displayName) { claims.name = user.displayName; }
+        if (user.name) {
+          if (user.name.familyName) { claims.family_name = user.name.familyName; }
+          if (user.name.givenName) { claims.given_name = user.name.givenName; }
+          if (user.name.middleName) { claims.middle_name = user.name.middleName; }
+        }
         
         res.json(claims);
       });
