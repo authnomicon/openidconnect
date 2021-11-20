@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Default ID token service queries directory and returns `preferred_username`,
-`name`, `given_name`, `family_name`, and `middle_name` in the ID token.
+- Default ID token service which returns `preferred_username`, `name`,
+`given_name`, `family_name`, and `middle_name` in the ID token.
 - Returning `given_name`, `family_name`, and `middle_name` claims from UserInfo
 endpoint.
 
