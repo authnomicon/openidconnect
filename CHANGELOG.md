@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Access token response is extended with `id_token` parameter.
 - Default ID token service which returns `preferred_username`, `name`,
-`given_name`, `family_name`, and `middle_name` in the ID token.
+`given_name`, `family_name`, `middle_name`, and `sid` in the ID token.
 - Returning `given_name`, `family_name`, and `middle_name` claims from UserInfo
 endpoint.
 

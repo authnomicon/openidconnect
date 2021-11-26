@@ -20,6 +20,10 @@ exports = module.exports = function(directory, vault, jwt) {
           if (user.name.middleName) { claims.middle_name = user.name.middleName; }
         }
         
+        if (msg.authContext) {
+          if (msg.authContext.sessionID) { claims.sid = msg.authContext.sessionID; }
+        }
+        
         if (msg.expires) { claims.exp = Math.floor(msg.expires.valueOf() / 1000); }
         else { claims.exp = Math.floor(Date.now() / 1000) + 7200; } // 2 hours from now
         if (msg.issued) { claims.iat = Math.floor(msg.issued.valueOf() / 1000); }
