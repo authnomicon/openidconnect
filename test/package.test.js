@@ -1,6 +1,7 @@
 /* global describe, it, expect */
 
 var expect = require('chai').expect;
+var sinon = require('sinon');
 
 
 describe('@authnomicon/oauth2-openid', function() {
@@ -29,4 +30,8 @@ describe('@authnomicon/oauth2-openid', function() {
     }).to.throw(Error).with.property('code', 'MODULE_NOT_FOUND');
   });
   
+});
+
+afterEach(function() {
+  sinon.restore();
 });
