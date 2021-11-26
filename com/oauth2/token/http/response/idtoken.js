@@ -1,6 +1,9 @@
 exports = module.exports = function(idts) {
   
   return function id_token(txn, cb) {
+    if (txn.type !== 'authorization_code') { return cb(null); }
+    if (!txn.scope || txn.scope.indexOf('openid') === -1) { return cb(null); }
+    
     var msg = {};
     if (txn.issuer) { msg.issuer = txn.issuer; }
     msg.user = txn.user;

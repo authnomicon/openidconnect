@@ -17,14 +17,16 @@ describe('token/http/response/idtoken', function() {
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
     var msg = {
+      type: 'authorization_code',
       user: {
         id: '248289761001'
       },
       client: {
         id: 's6BhdRkqt3',
         name: 'Example Client',
-        redirectURIs: [ 'https://client.example.com/cb' ]
-      }
+        redirectURIs: [ 'https://client.example.org/cb' ]
+      },
+      scope: [ 'openid', 'profile', 'email' ]
     }
     
     var extend = factory(idts);
@@ -39,14 +41,92 @@ describe('token/http/response/idtoken', function() {
         client: {
           id: 's6BhdRkqt3',
           name: 'Example Client',
-          redirectURIs: [ 'https://client.example.com/cb' ]
-        }
+          redirectURIs: [ 'https://client.example.org/cb' ]
+        },
+        scope: [ 'openid', 'profile', 'email' ]
       });
       expect(params).to.deep.equal({ id_token: 'eyJhbGci' });
       done();
     });
-    
-    
   }); // should extend response with ID token
+  
+  it('should not extend response with ID token when not authorization code grant', function(done) {
+    var idts = new Object();
+    idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
+    
+    var msg = {
+      type: 'password',
+      user: {
+        id: '248289761001'
+      },
+      client: {
+        id: 's6BhdRkqt3',
+        name: 'Example Client',
+        redirectURIs: [ 'https://client.example.com/cb' ]
+      }
+    }
+    
+    var extend = factory(idts);
+    extend(msg, function(err, params) {
+      if (err) { return done(err); }
+      
+      expect(idts.issue).to.not.be.called;
+      expect(params).to.be.undefined;
+      done();
+    });
+  }); // should not extend response with ID token when not authorization code grant
+  
+  it('should not extend response with ID token when scope is not present', function(done) {
+    var idts = new Object();
+    idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
+    
+    var msg = {
+      type: 'authorization_code',
+      user: {
+        id: '248289761001'
+      },
+      client: {
+        id: 's6BhdRkqt3',
+        name: 'Example Client',
+        redirectURIs: [ 'https://client.example.com/cb' ]
+      }
+    }
+    
+    var extend = factory(idts);
+    extend(msg, function(err, params) {
+      if (err) { return done(err); }
+      
+      expect(idts.issue).to.not.be.called;
+      expect(params).to.be.undefined;
+      done();
+    });
+  }); // should not extend response with ID token when scope is not present
+  
+  it('should not extend response with ID token when openid scope value is not present', function(done) {
+    var idts = new Object();
+    idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
+    
+    var msg = {
+      type: 'authorization_code',
+      user: {
+        id: '248289761001'
+      },
+      client: {
+        id: 's6BhdRkqt3',
+        name: 'Example Client',
+        redirectURIs: [ 'https://client.example.com/cb' ]
+      },
+      scope: [ 'profile', 'email' ]
+    }
+    
+    var extend = factory(idts);
+    extend(msg, function(err, params) {
+      if (err) { return done(err); }
+      
+      expect(idts.issue).to.not.be.called;
+      expect(params).to.be.undefined;
+      done();
+    });
+  }); // should not extend response with ID token when openid scope value is not present
   
 });
