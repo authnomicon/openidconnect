@@ -19,7 +19,8 @@ describe('@authnomicon/openidconnect', function() {
         'oauth2/authorize/http/response/idtokentoken',
         'oauth2/authorize/http/response/codeidtokentoken',
         'oauth2/token/http/response/idtoken',
-        'userinfo/http/service'
+        'userinfo/http/service',
+        'logout/http/service'
       ]);
     });
   });
