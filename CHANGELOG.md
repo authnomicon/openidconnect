@@ -12,7 +12,8 @@ authorization code grant type.
 `given_name`, `family_name`, `middle_name`, and `sid` in the ID token.
 - Returning `given_name`, `family_name`, and `middle_name` claims from UserInfo
 endpoint.
-- Initial implementation of RP-initiated logout.
+- Initial implementation of [RP-initiated logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html).
+- Initial implementation of [session management](https://openid.net/specs/openid-connect-session-1_0.html).
 
 ## [0.0.1] - 2021-10-19
 

@@ -42,13 +42,15 @@
       "oauth2/authorize/http/response/codeidtokentoken",
       "oauth2/token/http/response/idtoken",
       "userinfo/http/service",
-      "logout/http/service"
+      "logout/http/service",
+      "session/http/service"
     ]
   },
   "directories": {
     "com": "com"
   },
   "dependencies": {
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "oauth2orize-openid": "^0.1.2"
   },
