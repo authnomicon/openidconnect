@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var factory = require('../../../../../com/oauth2/authorize/http/response/codeidtoken');
 
 
-describe('hybrid/codeidtoken', function() {
+describe('oauth2/authorize/http/response/codeidtoken', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');

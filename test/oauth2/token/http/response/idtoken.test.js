@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var factory = require('../../../../../com/oauth2/token/http/response/idtoken');
 
 
-describe('token/http/response/idtoken', function() {
+describe('oauth2/token/http/response/idtoken', function() {
   
   it('should be annotated', function() {
     expect(factory['@implements']).to.equal('http://i.authnomicon.org/oauth2/token/http/ResponseParameters');

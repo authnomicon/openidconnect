@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 
 
-describe('@authnomicon/oauth2-openid', function() {
+describe('@authnomicon/openidconnect', function() {
   
   describe('package.json', function() {
     var json = require('../package.json');
