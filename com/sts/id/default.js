@@ -3,6 +3,7 @@ exports = module.exports = function(directory, vault, jwt) {
   return {
     issue: function(msg, cb) {
       // TODO: Respect scope here.  Don't query directory if scope doesn't need the claims.
+      //.      Maybe not?  Move directory read elsehwere?
       directory.read(msg.user.id, function(err, user) {
         if (err) { return next(err); }
       
@@ -38,7 +39,36 @@ exports = module.exports = function(directory, vault, jwt) {
           });
         });
       });
-    }
+    }, // issue
+    
+    verify: function(token, cb) {
+      vault.get(function(err, publicKey, privateKey) {
+        if (err) { return cb(err); }
+        
+        jwt.verify(token, publicKey, function(err, claims) {
+          if (err) { return cb(err); }
+          
+          var msg = {
+            issuer: claims.iss,
+            user: { id: claims.sub }
+          };
+          msg.client = { id: claims.aud };
+          
+          if (claims.preferred_username) { msg.user.username = claims.preferred_username; }
+          if (claims.name) { msg.user.displayName = claims.name; }
+          
+          if (claims.sid) {
+            msg.authContext = {};
+            msg.authContext.sessionID = claims.sid;
+          }
+          
+          msg.expires = new Date(claims.exp * 1000);
+          msg.issued = new Date(claims.iat * 1000);
+          
+          return cb(null, msg);
+        });
+      });
+    } // verify
   };
 };
 
