@@ -1,15 +1,9 @@
 <p>OP Session Check</p>
 
 <script>
-console.log('OP session check loaded...');
-
-
 window.addEventListener("message", receiveMessage, false);
 
 function receiveMessage(e){ // e.data has client_id and session_state
-  console.log('OP GOT MESSAGE');
-  console.log(e);
-
   var client_id = e.data.split(' ')[0];
   var session_state = e.data.split(' ')[1];
   var salt = session_state.split('.')[1];
