@@ -3,6 +3,7 @@ exports = module.exports = function(logoutHandler) {
   
   var router = new express.Router();
   router.get('/', logoutHandler);
+  router.post('/', logoutHandler);
   
   return router;
 };
