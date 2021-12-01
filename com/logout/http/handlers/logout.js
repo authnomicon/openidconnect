@@ -106,7 +106,7 @@ exports = module.exports = function(service, prompts, idts, clients, authenticat
 
 exports['@require'] = [
   '../../service',
-  'http://i.authnomicon.org/prompts/http/Registry',
+  'http://i.authnomicon.org/prompts/http/Router',
   '../../../sts/id',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
