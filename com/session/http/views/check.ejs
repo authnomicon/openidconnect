@@ -1,11 +1,35 @@
 <p>OP Session Check</p>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
 window.addEventListener("message", receiveMessage, false);
 
+// https://www.quirksmode.org/js/cookies.html
+// https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function get_op_user_agent_state() {
+  return readCookie('sst');
+}
+
 function receiveMessage(e){ // e.data has client_id and session_state
-  var client_id = e.data.split(' ')[0];
-  var session_state = e.data.split(' ')[1];
+  var arr = e.data.split(' ');
+  if (arr.length != 2) {
+    return;
+  }
+  
+  var client_id = arr[0];
+  var session_state = arr[1];
   var salt = session_state.split('.')[1];
 
   // if message is syntactically invalid
@@ -14,7 +38,7 @@ function receiveMessage(e){ // e.data has client_id and session_state
   // if message comes an unexpected origin
   //     postMessage('error', e.origin) and return
 
-  /*
+
   // get_op_user_agent_state() is an OP defined function
   // that returns the User Agent's login status at the OP.
   // How it is done is entirely up to the OP.
@@ -32,8 +56,7 @@ function receiveMessage(e){ // e.data has client_id and session_state
   } else {
     stat = 'changed';
   }
-
+  
   e.source.postMessage(stat, e.origin);
-  */
 };
 </script>

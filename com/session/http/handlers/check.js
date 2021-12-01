@@ -2,6 +2,8 @@ exports = module.exports = function() {
   var path = require('path')
     , ejs = require('ejs');
   
+    // WIP: Set jsState cookie in session manager, plumb it through here
+  
   function render(req, res, next) {
     // NOTE: This will include locals for state.
     res.render('openidconnect/session/check', function(err, str) {
