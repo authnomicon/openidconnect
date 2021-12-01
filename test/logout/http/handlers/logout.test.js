@@ -40,7 +40,7 @@ describe('logout/http/handlers/logout', function() {
     var stateSpy = sinon.spy(state);
     var sessionSpy = sinon.spy(session);
     
-    var handler = factory(service, idTokenService, clientDirectory, authenticateSpy, stateSpy, sessionSpy);
+    var handler = factory(service, null, idTokenService, clientDirectory, authenticateSpy, stateSpy, sessionSpy);
     
     expect(sessionSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledOnce;
@@ -74,14 +74,13 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       var clientDirectory = new Object();
-      var clientDirectory = new Object();
       clientDirectory.read = sinon.stub().yieldsAsync(null, {
         id: 's6BhdRkqt3',
         name: 'My Example',
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(service, idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(service, null, idTokenService, clientDirectory, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -132,14 +131,13 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       var clientDirectory = new Object();
-      var clientDirectory = new Object();
       clientDirectory.read = sinon.stub().yieldsAsync(null, {
         id: 's6BhdRkqt3',
         name: 'My Example',
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(service, idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(service, null, idTokenService, clientDirectory, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -169,6 +167,49 @@ describe('logout/http/handlers/logout', function() {
         .next(done)
         .listen();
     }); // should redirect back to relying party with state when it has current session
+    
+    it('should X', function(done) {
+      function service(req, res) {
+        expect(req.client).to.be.undefined;
+        
+        res.prompt('logout');
+      }
+      
+      var prompts = new Object();
+      prompts.dispatch = sinon.spy(function(name, req, res, next) {
+        next();
+      });
+      var idTokenService = new Object();
+      idTokenService.verify = sinon.spy()
+      var clientDirectory = new Object();
+      clientDirectory.read = sinon.spy();
+      
+      var handler = factory(service, prompts, idTokenService, clientDirectory, authenticate, state, session);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.state = new Object();
+          req.state.complete = sinon.spy();
+          req.logout = sinon.spy();
+          
+          req.query = {};
+          //req.sessionID = '08a5019c-17e1-4977-8f42-65a12843ea02';
+        })
+        .finish(function() {
+          expect(idTokenService.verify).to.be.calledOnce;
+          expect(idTokenService.verify).to.be.calledWith('eyJhbGci');
+          expect(clientDirectory.read).to.be.calledOnce;
+          expect(clientDirectory.read).to.be.calledWith('s6BhdRkqt3');
+          expect(this.req.logout).to.be.calledOnce;
+          expect(this.req.state.complete).to.be.calledOnce;
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('https://client.example.org/logout/cb');
+          done();
+        })
+        .next(done)
+        .listen();
+    }); // should redirect back to relying party when it has current session
     
   }); // handler
   

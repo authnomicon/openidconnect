@@ -1,4 +1,4 @@
-exports = module.exports = function(service, idts, clients, authenticate, state, session) {
+exports = module.exports = function(service, prompts, idts, clients, authenticate, state, session) {
   var url = require('url');
   
   var Request = require('../../../../lib/logout/request')
@@ -10,7 +10,7 @@ exports = module.exports = function(service, idts, clients, authenticate, state,
   // TODO: Test case for whn redirect uri is present, but no id token hint
   
   function verifyIDToken(req, res, next) {
-    if (!req.query.id_token_hint) { return next(); }
+    if (!req.query.id_token_hint) { return next('ENORP'); }
     
     var idTokenHint = req.query.id_token_hint;
     
@@ -38,39 +38,7 @@ exports = module.exports = function(service, idts, clients, authenticate, state,
     var idToken = res.locals.idToken;
     
     if (idToken.authContext.sessionID === req.sessionID) {
-      var loreq = new Request(res.locals.client)
-        , lores = new Response();
-      
-      function onprompt(name, options) {
-        console.log('PROMPT: ' + name)
-        console.log(options);
-        
-      }
-      
-      function onlogout(ok) {
-        req.logout();
-      
-        var uri = url.parse(res.locals.postLogoutRedirectURI, true);
-        delete uri.search;
-        if (req.query.state) { uri.query.state = req.query.state; }
-      
-        req.state.complete();
-      
-        var location = url.format(uri);
-        return res.redirect(location);
-      }
-      
-      function onend() {
-        lores.removeListener('prompt', onprompt);
-        lores.removeListener('logout', onlogout);
-      }
-  
-      lores.once('prompt', onprompt);
-      lores.once('logout', onlogout);
-      lores.once('end', onend);
-  
-      service(loreq, lores);
-      
+      next();
       
       //res.redirect('/')
       
@@ -84,18 +52,61 @@ exports = module.exports = function(service, idts, clients, authenticate, state,
     }
   }
   
+  function enorpTrap(err, req, res, next) {
+    if (err === 'ENORP') { return next(); }
+    return next(err);
+  }
+  
+  function handle(req, res, next) {
+    var loreq = new Request(res.locals.client)
+      , lores = new Response();
+  
+    function onprompt(name, options) {
+      // FIXME: Merge rather than overwrite
+      res.locals = options || {};
+      prompts.dispatch(name, req, res, next);
+    }
+  
+    function onlogout(ok) {
+      req.logout();
+  
+      var uri = url.parse(res.locals.postLogoutRedirectURI, true);
+      delete uri.search;
+      if (req.query.state) { uri.query.state = req.query.state; }
+  
+      req.state.complete();
+  
+      var location = url.format(uri);
+      return res.redirect(location);
+    }
+  
+    function onend() {
+      lores.removeListener('prompt', onprompt);
+      lores.removeListener('logout', onlogout);
+    }
+
+    lores.once('prompt', onprompt);
+    lores.once('logout', onlogout);
+    lores.once('end', onend);
+
+    service(loreq, lores);
+  }
+  
   return [
     session(),
     state({ external: true }),
     authenticate('anonymous'),
     verifyIDToken,
     validateClient,
-    logout
+    logout,
+    enorpTrap,
+    handle
   ];
 };
 
 exports['@require'] = [
   '../../service',
+  'http://i.authnomicon.org/prompts/http/Registry',
   '../../../sts/id',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
