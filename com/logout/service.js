@@ -4,6 +4,7 @@ exports = module.exports = function(C) {
     .catch(function(error) {
       if (error.code == 'IMPLEMENTATION_NOT_FOUND' && error.interface == 'http://i.authnomicon.org/openidconnect/LogoutService') {
         return function(req, res) {
+          if (!req.client) { return res.prompt('logout'); }
           res.logout();
         };
       }
