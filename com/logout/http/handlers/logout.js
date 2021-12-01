@@ -1,8 +1,13 @@
-exports = module.exports = function(idts, clients, authenticate, state, session) {
+exports = module.exports = function(service, idts, clients, authenticate, state, session) {
   var url = require('url');
+  
+  var Request = require('../../../../lib/logout/request')
+    , Response = require('../../../../lib/logout/response');
   
   // TODO: post_logout_redirect_uri.  id_token_hint required when using this
   // TODO: state
+  
+  // TODO: Test case for whn redirect uri is present, but no id token hint
   
   function verifyIDToken(req, res, next) {
     if (!req.query.id_token_hint) { return next(); }
@@ -32,16 +37,40 @@ exports = module.exports = function(idts, clients, authenticate, state, session)
     var idToken = res.locals.idToken;
     
     if (idToken.authContext.sessionID === req.sessionID) {
-      req.logout();
+      var loreq = new Request()
+        , lores = new Response();
       
-      var uri = url.parse(res.locals.postLogoutRedirectURI, true);
-      delete uri.search;
-      if (req.query.state) { uri.query.state = req.query.state; }
+      function onprompt(name, options) {
+        console.log('PROMPT: ' + name)
+        console.log(options);
+        
+      }
       
-      req.state.complete();
+      function onlogout(ok) {
+        req.logout();
       
-      var location = url.format(uri);
-      return res.redirect(location);
+        var uri = url.parse(res.locals.postLogoutRedirectURI, true);
+        delete uri.search;
+        if (req.query.state) { uri.query.state = req.query.state; }
+      
+        req.state.complete();
+      
+        var location = url.format(uri);
+        return res.redirect(location);
+      }
+      
+      function onend() {
+        lores.removeListener('prompt', onprompt);
+        lores.removeListener('logout', onlogout);
+      }
+  
+      lores.once('prompt', onprompt);
+      lores.once('logout', onlogout);
+      lores.once('end', onend);
+  
+      service(loreq, lores);
+      
+      
       //res.redirect('/')
       
       // TODO: Async logout in passport
@@ -65,6 +94,7 @@ exports = module.exports = function(idts, clients, authenticate, state, session)
 };
 
 exports['@require'] = [
+  '../../service',
   '../../../sts/id',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',

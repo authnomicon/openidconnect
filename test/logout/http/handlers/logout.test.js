@@ -33,13 +33,14 @@ describe('logout/http/handlers/logout', function() {
   }
   
   it('should create handler', function() {
+    var service = function(){};
     var idTokenService = new Object();
     var clientDirectory = new Object();
     var authenticateSpy = sinon.spy(authenticate);
     var stateSpy = sinon.spy(state);
     var sessionSpy = sinon.spy(session);
     
-    var handler = factory(idTokenService, clientDirectory, authenticateSpy, stateSpy, sessionSpy);
+    var handler = factory(service, idTokenService, clientDirectory, authenticateSpy, stateSpy, sessionSpy);
     
     expect(sessionSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledOnce;
@@ -53,6 +54,10 @@ describe('logout/http/handlers/logout', function() {
   describe('handler', function() {
     
     it('should redirect back to relying party', function(done) {
+      function service(req, res) {
+        res.logout();
+      }
+      
       var idTokenService = new Object();
       idTokenService.verify = sinon.stub().yieldsAsync(null, {
         issuer: 'https://server.example.com',
@@ -70,7 +75,7 @@ describe('logout/http/handlers/logout', function() {
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(service, idTokenService, clientDirectory, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -101,6 +106,10 @@ describe('logout/http/handlers/logout', function() {
     }); // should redirect back to relying party
     
     it('should redirect back to relying party with state', function(done) {
+      function service(req, res) {
+        res.logout();
+      }
+      
       var idTokenService = new Object();
       idTokenService.verify = sinon.stub().yieldsAsync(null, {
         issuer: 'https://server.example.com',
@@ -118,7 +127,7 @@ describe('logout/http/handlers/logout', function() {
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(service, idTokenService, clientDirectory, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
