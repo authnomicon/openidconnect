@@ -37,6 +37,8 @@ exports = module.exports = function(service, prompts, idts, clients, authenticat
   function logout(req, res, next) {
     var idToken = res.locals.idToken;
     
+    // TODO: Implement a FederatedSessionManager, and set a logged-out bit accordingly
+    
     if (idToken.authContext.sessionID === req.sessionID) {
       next();
       
