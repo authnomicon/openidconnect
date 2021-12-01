@@ -28,6 +28,7 @@ exports = module.exports = function(service, idts, clients, authenticate, state,
     clients.read(idToken.client.id, function(err, client) {
       if (err) { return next(err); }
       
+      res.locals.client = client;
       res.locals.postLogoutRedirectURI = postLogoutRedirectURI;
       next();
     });
@@ -37,7 +38,7 @@ exports = module.exports = function(service, idts, clients, authenticate, state,
     var idToken = res.locals.idToken;
     
     if (idToken.authContext.sessionID === req.sessionID) {
-      var loreq = new Request()
+      var loreq = new Request(res.locals.client)
         , lores = new Response();
       
       function onprompt(name, options) {

@@ -55,6 +55,12 @@ describe('logout/http/handlers/logout', function() {
     
     it('should redirect back to relying party', function(done) {
       function service(req, res) {
+        expect(req.client).to.deep.equal({
+          id: 's6BhdRkqt3',
+          name: 'My Example',
+          postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
+        });
+        
         res.logout();
       }
       
@@ -107,6 +113,12 @@ describe('logout/http/handlers/logout', function() {
     
     it('should redirect back to relying party with state', function(done) {
       function service(req, res) {
+        expect(req.client).to.deep.equal({
+          id: 's6BhdRkqt3',
+          name: 'My Example',
+          postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
+        });
+        
         res.logout();
       }
       
