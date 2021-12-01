@@ -53,7 +53,7 @@ describe('logout/http/handlers/logout', function() {
   
   describe('handler', function() {
     
-    it('should redirect back to relying party', function(done) {
+    it('should redirect back to relying party when it has current session', function(done) {
       function service(req, res) {
         expect(req.client).to.deep.equal({
           id: 's6BhdRkqt3',
@@ -109,9 +109,9 @@ describe('logout/http/handlers/logout', function() {
         })
         .next(done)
         .listen();
-    }); // should redirect back to relying party
+    }); // should redirect back to relying party when it has current session
     
-    it('should redirect back to relying party with state', function(done) {
+    it('should redirect back to relying party with state when it has current session', function(done) {
       function service(req, res) {
         expect(req.client).to.deep.equal({
           id: 's6BhdRkqt3',
@@ -168,7 +168,7 @@ describe('logout/http/handlers/logout', function() {
         })
         .next(done)
         .listen();
-    }); // should redirect back to relying party with state
+    }); // should redirect back to relying party with state when it has current session
     
   }); // handler
   
