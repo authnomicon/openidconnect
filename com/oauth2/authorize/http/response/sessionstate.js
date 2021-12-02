@@ -5,6 +5,7 @@ exports = module.exports = function(idts) {
   
   
   return function session_state(txn, cb) {
+    if (!txn.res.scope || txn.res.scope.indexOf('openid') === -1) { return cb(); }
     var state = txn.res.authContext && txn.res.authContext.sessionState;
     if (!state) { return cb(); }
     
