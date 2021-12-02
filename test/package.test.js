@@ -18,6 +18,7 @@ describe('@authnomicon/openidconnect', function() {
         'oauth2/authorize/http/response/codeidtoken',
         'oauth2/authorize/http/response/idtokentoken',
         'oauth2/authorize/http/response/codeidtokentoken',
+        'oauth2/authorize/http/response/sessionstate',
         'oauth2/token/http/response/idtoken',
         'userinfo/http/service',
         'logout/http/service',

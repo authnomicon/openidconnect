@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Token response is extended with `id_token` parameter when exchanging an
 authorization code issued via authentication response.
+- Authenticatation response is extended with `session_state` parameter.
 - Default ID token service which issues `preferred_username`, `name`,
 `given_name`, `family_name`, `middle_name`, and `sid` claims in the ID token.
 - Returning `given_name`, `family_name`, and `middle_name` claims from UserInfo

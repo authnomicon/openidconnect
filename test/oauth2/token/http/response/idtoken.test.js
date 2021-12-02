@@ -9,6 +9,7 @@ describe('oauth2/token/http/response/idtoken', function() {
   
   it('should be annotated', function() {
     expect(factory['@implements']).to.equal('http://i.authnomicon.org/oauth2/token/http/ResponseParameters');
+    expect(factory['@singleton']).to.be.undefined;
   });
   
   
@@ -16,7 +17,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var msg = {
+    var txn = {
       type: 'authorization_code',
       user: {
         id: '248289761001'
@@ -30,7 +31,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     }
     
     var extend = factory(idts);
-    extend(msg, function(err, params) {
+    extend(txn, function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.be.calledOnce;
@@ -54,7 +55,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var msg = {
+    var txn = {
       type: 'password',
       user: {
         id: '248289761001'
@@ -67,7 +68,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     }
     
     var extend = factory(idts);
-    extend(msg, function(err, params) {
+    extend(txn, function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;
@@ -80,7 +81,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var msg = {
+    var txn = {
       type: 'authorization_code',
       user: {
         id: '248289761001'
@@ -93,7 +94,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     }
     
     var extend = factory(idts);
-    extend(msg, function(err, params) {
+    extend(txn, function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;
@@ -106,7 +107,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var msg = {
+    var txn = {
       type: 'authorization_code',
       user: {
         id: '248289761001'
@@ -120,7 +121,7 @@ describe('oauth2/token/http/response/idtoken', function() {
     }
     
     var extend = factory(idts);
-    extend(msg, function(err, params) {
+    extend(txn, function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;
