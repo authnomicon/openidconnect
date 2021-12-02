@@ -20,6 +20,9 @@ exports = module.exports = function(directory, vault, jwt) {
           if (user.name.givenName) { claims.given_name = user.name.givenName; }
           if (user.name.middleName) { claims.middle_name = user.name.middleName; }
         }
+        if (user.emails && user.emails.length) {
+          if (user.emails[0].value) { claims.email = user.emails[0].value; }
+        }
         
         if (msg.authContext) {
           if (msg.authContext.sessionID) { claims.sid = msg.authContext.sessionID; }
