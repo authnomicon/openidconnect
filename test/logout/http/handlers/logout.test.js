@@ -40,7 +40,7 @@ describe('logout/http/handlers/logout', function() {
     var stateSpy = sinon.spy(state);
     var sessionSpy = sinon.spy(session);
     
-    var handler = factory(service, null, idTokenService, clientDirectory, authenticateSpy, stateSpy, sessionSpy);
+    var handler = factory(null, service, clientDirectory, idTokenService, authenticateSpy, stateSpy, sessionSpy);
     
     expect(sessionSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledOnce;
@@ -80,7 +80,7 @@ describe('logout/http/handlers/logout', function() {
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(service, null, idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -137,7 +137,7 @@ describe('logout/http/handlers/logout', function() {
         postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
-      var handler = factory(service, null, idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -184,7 +184,7 @@ describe('logout/http/handlers/logout', function() {
       var clientDirectory = new Object();
       clientDirectory.read = sinon.spy();
       
-      var handler = factory(service, prompts, idTokenService, clientDirectory, authenticate, state, session);
+      var handler = factory(prompts, service, clientDirectory, idTokenService, authenticate, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {

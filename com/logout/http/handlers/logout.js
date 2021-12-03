@@ -1,4 +1,4 @@
-exports = module.exports = function(service, prompts, idts, clients, authenticate, state, session) {
+exports = module.exports = function(prompts, service, clients, idts, authenticate, state, session) {
   var url = require('url');
   
   var Request = require('../../../../lib/logout/request')
@@ -107,10 +107,10 @@ exports = module.exports = function(service, prompts, idts, clients, authenticat
 };
 
 exports['@require'] = [
-  '../../service',
   'http://i.authnomicon.org/prompts/http/Router',
-  '../../../sts/id',
+  '../../service',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
+  '../../../sts/id',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state',
   'http://i.bixbyjs.org/http/middleware/session'
