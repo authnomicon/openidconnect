@@ -106,7 +106,6 @@ describe('logout/http/handlers/logout', function() {
           expect(this.getHeader('Location')).to.equal('https://client.example.org/logout/cb');
           done();
         })
-        .next(done)
         .listen();
     }); // should redirect back to relying party when it has current session
     
@@ -164,7 +163,6 @@ describe('logout/http/handlers/logout', function() {
           expect(this.getHeader('Location')).to.equal('https://client.example.org/logout/cb?state=af0ifjsldkj');
           done();
         })
-        .next(done)
         .listen();
     }); // should redirect back to relying party with state when it has current session
     
