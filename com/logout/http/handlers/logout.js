@@ -94,9 +94,11 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
     service(loreq, lores);
   }
   
+  
   return [
     session(),
     state({ external: true }),
+    // TODO: authenticate session???  probably not because could be logged out, and still want to llow client
     authenticate('anonymous'),
     verifyIDToken,
     validateClient,
