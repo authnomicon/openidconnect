@@ -34,8 +34,8 @@ describe('logout/http/handlers/logout', function() {
   
   it('should create handler', function() {
     var service = function(){};
-    var idTokenService = new Object();
     var clientDirectory = new Object();
+    var idTokenService = new Object();
     var authenticateSpy = sinon.spy(authenticate);
     var stateSpy = sinon.spy(state);
     var sessionSpy = sinon.spy(session);
@@ -64,6 +64,12 @@ describe('logout/http/handlers/logout', function() {
         res.logout();
       }
       
+      var clientDirectory = new Object();
+      clientDirectory.read = sinon.stub().yieldsAsync(null, {
+        id: 's6BhdRkqt3',
+        name: 'My Example',
+        postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
+      });
       var idTokenService = new Object();
       idTokenService.verify = sinon.stub().yieldsAsync(null, {
         issuer: 'https://server.example.com',
@@ -72,12 +78,6 @@ describe('logout/http/handlers/logout', function() {
         authContext: { sessionID: '08a5019c-17e1-4977-8f42-65a12843ea02' },
         expires: new Date(1311288170 * 1000),
         issued: new Date(1311280970 * 1000)
-      });
-      var clientDirectory = new Object();
-      clientDirectory.read = sinon.stub().yieldsAsync(null, {
-        id: 's6BhdRkqt3',
-        name: 'My Example',
-        postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
       var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
@@ -121,6 +121,12 @@ describe('logout/http/handlers/logout', function() {
         res.logout();
       }
       
+      var clientDirectory = new Object();
+      clientDirectory.read = sinon.stub().yieldsAsync(null, {
+        id: 's6BhdRkqt3',
+        name: 'My Example',
+        postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
+      });
       var idTokenService = new Object();
       idTokenService.verify = sinon.stub().yieldsAsync(null, {
         issuer: 'https://server.example.com',
@@ -129,12 +135,6 @@ describe('logout/http/handlers/logout', function() {
         authContext: { sessionID: '08a5019c-17e1-4977-8f42-65a12843ea02' },
         expires: new Date(1311288170 * 1000),
         issued: new Date(1311280970 * 1000)
-      });
-      var clientDirectory = new Object();
-      clientDirectory.read = sinon.stub().yieldsAsync(null, {
-        id: 's6BhdRkqt3',
-        name: 'My Example',
-        postLogoutRedirectURIs: [ 'https://client.example.org/logout/cb' ]
       });
       
       var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
