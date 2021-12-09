@@ -1,7 +1,7 @@
-exports = module.exports = function(container, ats, acs, logger) {
+exports = module.exports = function(ats, acs, logger, C) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
+  var modeComps = C.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -55,8 +55,8 @@ exports = module.exports = function(container, ats, acs, logger) {
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'code token';
 exports['@require'] = [
-  '!container',
   'http://i.authnomicon.org/oauth2/AccessTokenService',
   'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
-  'http://i.bixbyjs.org/Logger'
+  'http://i.bixbyjs.org/Logger',
+  '!container'
 ];
