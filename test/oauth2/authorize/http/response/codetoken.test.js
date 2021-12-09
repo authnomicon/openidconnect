@@ -68,7 +68,7 @@ describe('oauth2/authorize/http/response/codetoken', function() {
       
       factory(ats, null, logger, container)
         .then(function(type) {
-          issue = codeTokenSpy.getCall(0).args[1];
+          issueToken = codeTokenSpy.getCall(0).args[1];
           done();
         })
         .catch(done);
@@ -87,13 +87,13 @@ describe('oauth2/authorize/http/response/codetoken', function() {
         allow: true
       }
       var areq = {
-        type: 'code',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.com/cb',
         state: 'xyz'
       }
       
-      issue(client, user, ares, areq, {}, function(err, token) {
+      issueToken(client, user, ares, areq, {}, function(err, token) {
         if (err) { return done(err); }
         
         expect(ats.issue.callCount).to.equal(1);
@@ -123,16 +123,16 @@ describe('oauth2/authorize/http/response/codetoken', function() {
       };
       var ares = {
         allow: true,
-        scope: [ 'profile', 'email' ]
+        scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'code',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
-        redirectURI: 'https://client.example.com/cb',
-        state: 'xyz'
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
       }
       
-      issue(client, user, ares, areq, {}, function(err, token) {
+      issueToken(client, user, ares, areq, {}, function(err, token) {
         if (err) { return done(err); }
         
         expect(ats.issue.callCount).to.equal(1);
@@ -145,7 +145,7 @@ describe('oauth2/authorize/http/response/codetoken', function() {
             id: '248289761001',
             displayName: 'Jane Doe'
           },
-          scope: [ 'profile', 'email' ]
+          scope: [ 'openid', 'profile', 'email' ]
         });
         expect(token).to.equal('2YotnFZFEjr1zCsicMWpAA');
         done();
@@ -153,5 +153,114 @@ describe('oauth2/authorize/http/response/codetoken', function() {
     }); // should issue access token with scope
     
   }); // issueToken
+  
+  describe('issueCode', function() {
+    var container = new Object();
+    container.components = sinon.stub()
+    container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode').returns([]);
+    container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters').returns([]);
+    var acs = new Object();
+    
+    var codeTokenSpy = sinon.stub();
+    var factory = $require('../../../../../com/oauth2/authorize/http/response/codetoken', {
+      'oauth2orize-openid': {
+        grant: { codeToken: codeTokenSpy }
+      }
+    });
+    
+    var issueCode;
+    
+    beforeEach(function(done) {
+      acs.issue = sinon.stub().yieldsAsync(null, 'SplxlOBeZQQYbYS6WxSbIA');
+      
+      factory(null, acs, logger, container)
+        .then(function(type) {
+          issueCode = codeTokenSpy.getCall(0).args[2];
+          done();
+        })
+        .catch(done);
+    });
+    
+    it('should issue authorization code', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example Client'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true
+      }
+      var areq = {
+        type: 'code',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.com/cb',
+        state: 'xyz'
+      }
+      
+      issueCode(client, 'https://client.example.com/cb', user, ares, areq, {}, function(err, code) {
+        if (err) { return done(err); }
+        
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example Client'
+          },
+          redirectURI: 'https://client.example.com/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          }
+        });
+        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
+        done();
+      });
+    }); // should issue authorization code
+    
+    it('should issue authorization code with scope', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example Client'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        scope: [ 'openid', 'profile', 'email' ]
+      }
+      var areq = {
+        type: 'code',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, code) {
+        if (err) { return done(err); }
+        
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example Client'
+          },
+          redirectURI: 'https://client.example.org/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          scope: [ 'openid', 'profile', 'email' ]
+        });
+        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
+        done();
+      });
+    }); // should issue authorization code with scope
+    
+  }); // issueCode
   
 });
