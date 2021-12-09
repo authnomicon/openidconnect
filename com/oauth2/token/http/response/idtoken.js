@@ -7,6 +7,8 @@ exports = module.exports = function(idts) {
     
     var idmsg = merge({}, msg);
     
+    // TODO: Bind access token, if available
+    
     idts.issue(idmsg, function(err, token) {
       if (err) { return cb(err); }
       return cb(null, { id_token: token });
