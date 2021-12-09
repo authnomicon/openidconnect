@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 property, rather than `grant.scope`.
 - `AuthorizationCodeService#issue()` is called with `msg` argument containing
 `scope` property, rather than `grant.scope`.
+- Changed ID Token token response parameter extension to 4-arity form, in
+accordance with latest changes in `@authnomicon/oauth2`.
 
 ## [0.0.3] - 2021-12-02
 ### Added
