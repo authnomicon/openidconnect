@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added `issuer` property to `msg` argument passed to `AccessTokenService#issue()`.
+- Added `authContext` property to `msg` argument passed to `AccessTokenService#issue()`.
 - Added `issuer` property to `msg` argument passed to `AuthorizationCodeService#issue()`.
 - Added `authContext` property to `msg` argument passed to `AuthorizationCodeService#issue()`.
 

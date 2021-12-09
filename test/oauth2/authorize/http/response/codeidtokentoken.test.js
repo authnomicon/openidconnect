@@ -152,6 +152,102 @@ describe('oauth2/authorize/http/response/codeidtokentoken', function() {
       });
     }); // should issue access token with scope
     
+    it('should issue access token with issuer', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        issuer: 'https://server.example.com',
+        scope: [ 'openid', 'profile', 'email' ]
+      }
+      var areq = {
+        type: 'code id_token token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueToken(client, user, ares, areq, {}, function(err, token) {
+        if (err) { return done(err); }
+        
+        expect(ats.issue.callCount).to.equal(1);
+        expect(ats.issue.getCall(0).args[0]).to.deep.equal({
+          issuer: 'https://server.example.com',
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example'
+          },
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          scope: [ 'openid', 'profile', 'email' ]
+        });
+        expect(token).to.equal('2YotnFZFEjr1zCsicMWpAA');
+        done();
+      });
+    }); // should issue access token with issuer
+    
+    it('should issue access token with authentication context', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        issuer: 'https://server.example.com',
+        scope: [ 'openid', 'profile', 'email' ],
+        authContext: {
+          sessionID: 'YU7uoYRVAxF34TuoAodVfw-1eA13rhqW',
+          methods: [
+            { method: 'password', timestamp: new Date('2011-07-21T20:42:49.000Z') }
+          ]
+        }
+      }
+      var areq = {
+        type: 'code id_token token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueToken(client, user, ares, areq, {}, function(err, token) {
+        if (err) { return done(err); }
+        
+        expect(ats.issue.callCount).to.equal(1);
+        expect(ats.issue.getCall(0).args[0]).to.deep.equal({
+          issuer: 'https://server.example.com',
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example'
+          },
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          scope: [ 'openid', 'profile', 'email' ],
+          authContext: {
+            sessionID: 'YU7uoYRVAxF34TuoAodVfw-1eA13rhqW',
+            methods: [
+              { method: 'password', timestamp: new Date('2011-07-21T20:42:49.000Z') }
+            ]
+          }
+        });
+        expect(token).to.equal('2YotnFZFEjr1zCsicMWpAA');
+        done();
+      });
+    }); // should issue access token with authentication context
+    
   }); // issueToken
   
   describe('issueCode', function() {
@@ -276,7 +372,7 @@ describe('oauth2/authorize/http/response/codeidtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'code',
+        type: 'code id_token token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
@@ -325,7 +421,7 @@ describe('oauth2/authorize/http/response/codeidtokentoken', function() {
         }
       }
       var areq = {
-        type: 'code',
+        type: 'code id_token token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
