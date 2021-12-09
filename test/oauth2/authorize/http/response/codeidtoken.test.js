@@ -300,7 +300,7 @@ describe('oauth2/authorize/http/response/codeidtoken', function() {
         state: 'xyz'
       }
       
-      issueIDToken(client, user, ares, areq, {}, {}, function(err, token) {
+      issueIDToken(client, user, ares, areq, { authorizationCode: 'SplxlOBeZQQYbYS6WxSbIA' }, {}, function(err, token) {
         if (err) { return done(err); }
         
         expect(idts.issue.callCount).to.equal(1);
@@ -318,6 +318,142 @@ describe('oauth2/authorize/http/response/codeidtoken', function() {
         done();
       });
     }); // should issue ID token
+    
+    it('should issue ID token with scope', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        scope: [ 'openid', 'profile', 'email' ]
+      }
+      var areq = {
+        type: 'code id_token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueIDToken(client, user, ares, areq, { authorizationCode: 'SplxlOBeZQQYbYS6WxSbIA' }, {}, function(err, token) {
+        if (err) { return done(err); }
+        
+        expect(idts.issue.callCount).to.equal(1);
+        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example'
+          },
+          scope: [ 'openid', 'profile', 'email' ]
+        });
+        expect(token).to.equal('eyJhbGci');
+        done();
+      });
+    }); // should issue ID token with scope
+    
+    it('should issue ID token with issuer', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        issuer: 'https://server.example.com',
+        scope: [ 'openid', 'profile', 'email' ]
+      }
+      var areq = {
+        type: 'code id_token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueIDToken(client, user, ares, areq, { authorizationCode: 'SplxlOBeZQQYbYS6WxSbIA' }, {}, function(err, token) {
+        if (err) { return done(err); }
+        
+        expect(idts.issue.callCount).to.equal(1);
+        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+          issuer: 'https://server.example.com',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example'
+          },
+          scope: [ 'openid', 'profile', 'email' ]
+        });
+        expect(token).to.equal('eyJhbGci');
+        done();
+      });
+    }); // should issue ID token with issuer
+    
+    it('should issue ID token with authentication context', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true,
+        issuer: 'https://server.example.com',
+        scope: [ 'openid', 'profile', 'email' ],
+        authContext: {
+          sessionID: 'YU7uoYRVAxF34TuoAodVfw-1eA13rhqW',
+          methods: [
+            { method: 'password', timestamp: new Date('2011-07-21T20:42:49.000Z') }
+          ]
+        }
+      }
+      var areq = {
+        type: 'code id_token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.org/cb',
+        state: 'af0ifjsldkj'
+      }
+      
+      issueIDToken(client, user, ares, areq, { authorizationCode: 'SplxlOBeZQQYbYS6WxSbIA' }, {}, function(err, token) {
+        if (err) { return done(err); }
+        
+        expect(idts.issue.callCount).to.equal(1);
+        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+          issuer: 'https://server.example.com',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example'
+          },
+          scope: [ 'openid', 'profile', 'email' ],
+          authContext: {
+            sessionID: 'YU7uoYRVAxF34TuoAodVfw-1eA13rhqW',
+            methods: [
+              { method: 'password', timestamp: new Date('2011-07-21T20:42:49.000Z') }
+            ]
+          }
+        });
+        expect(token).to.equal('eyJhbGci');
+        done();
+      });
+    }); // should issue ID token with authentication context
     
   }); // issueIDToken
   

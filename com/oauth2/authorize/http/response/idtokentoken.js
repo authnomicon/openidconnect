@@ -40,10 +40,13 @@ exports = module.exports = function(idts, ats, logger, C) {
           if (err) { return cb(err); }
           return cb(null, token);
         });
-      }, function(client, user, ares, areq, bound, locals, cb) {
+      }, function(client, user, ares, areq, bind, locals, cb) {
         var msg = {};
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.user = user;
         msg.client = client;
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         idts.issue(msg, function(err, token) {
           if (err) { return cb(err); }
