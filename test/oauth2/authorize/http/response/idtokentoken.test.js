@@ -87,7 +87,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         allow: true
       }
       var areq = {
-        type: 'code token',
+        type: 'id_token token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.com/cb',
         state: 'xyz'
@@ -126,7 +126,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'code token',
+        type: 'id_token token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
