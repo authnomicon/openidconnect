@@ -3,14 +3,14 @@
 var expect = require('chai').expect;
 var $require = require('proxyquire');
 var sinon = require('sinon');
-var factory = require('../../../../../com/oauth2/authorize/http/response/idtokentoken');
+var factory = require('../../../../../../com/oauth2/authorize/http/response/types/codetoken');
 
 
-describe('oauth2/authorize/http/response/idtokentoken', function() {
+describe('oauth2/authorize/http/response/types/codetoken', function() {
   
   it('should be annotated', function() {
     expect(factory['@implements']).to.equal('http://i.authnomicon.org/oauth2/authorization/http/ResponseType');
-    expect(factory['@type']).to.equal('id_token token');
+    expect(factory['@type']).to.equal('code token');
   });
   
   
@@ -31,17 +31,17 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
     container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode').returns([]);
     container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters').returns([]);
     
-    var idTokenTokenSpy = sinon.stub();
-    var factory = $require('../../../../../com/oauth2/authorize/http/response/idtokentoken', {
+    var codeTokenSpy = sinon.stub();
+    var factory = $require('../../../../../../com/oauth2/authorize/http/response/types/codetoken', {
       'oauth2orize-openid': {
-        grant: { idTokenToken: idTokenTokenSpy }
+        grant: { codeToken: codeTokenSpy }
       }
     });
     
     factory(null, null, logger, container)
       .then(function(type) {
-        expect(idTokenTokenSpy).to.be.calledOnce;
-        expect(idTokenTokenSpy).to.be.calledWith({ modes: {} });
+        expect(codeTokenSpy).to.be.calledOnce;
+        expect(codeTokenSpy).to.be.calledWith({ modes: {} });
         done();
       })
       .catch(done);
@@ -54,10 +54,10 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
     container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters').returns([]);
     var ats = new Object();
     
-    var idTokenTokenSpy = sinon.stub();
-    var factory = $require('../../../../../com/oauth2/authorize/http/response/idtokentoken', {
+    var codeTokenSpy = sinon.stub();
+    var factory = $require('../../../../../../com/oauth2/authorize/http/response/types/codetoken', {
       'oauth2orize-openid': {
-        grant: { idTokenToken: idTokenTokenSpy }
+        grant: { codeToken: codeTokenSpy }
       }
     });
     
@@ -66,9 +66,9 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
     beforeEach(function(done) {
       ats.issue = sinon.stub().yieldsAsync(null, '2YotnFZFEjr1zCsicMWpAA');
       
-      factory(null, ats, logger, container)
+      factory(ats, null, logger, container)
         .then(function(type) {
-          issueToken = idTokenTokenSpy.getCall(0).args[1];
+          issueToken = codeTokenSpy.getCall(0).args[1];
           done();
         })
         .catch(done);
@@ -87,7 +87,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         allow: true
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.com/cb',
         state: 'xyz'
@@ -126,7 +126,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
@@ -167,7 +167,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
@@ -215,7 +215,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         }
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
@@ -250,34 +250,34 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
     
   }); // issueToken
   
-  describe('issueIDToken', function() {
+  describe('issueCode', function() {
     var container = new Object();
     container.components = sinon.stub()
     container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode').returns([]);
     container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters').returns([]);
-    var idts = new Object();
+    var acs = new Object();
     
-    var idTokenTokenSpy = sinon.stub();
-    var factory = $require('../../../../../com/oauth2/authorize/http/response/idtokentoken', {
+    var codeTokenSpy = sinon.stub();
+    var factory = $require('../../../../../../com/oauth2/authorize/http/response/types/codetoken', {
       'oauth2orize-openid': {
-        grant: { idTokenToken: idTokenTokenSpy }
+        grant: { codeToken: codeTokenSpy }
       }
     });
     
-    var issueIDToken;
+    var issueCode;
     
     beforeEach(function(done) {
-      idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
+      acs.issue = sinon.stub().yieldsAsync(null, 'SplxlOBeZQQYbYS6WxSbIA');
       
-      factory(idts, null, logger, container)
+      factory(null, acs, logger, container)
         .then(function(type) {
-          issueIDToken = idTokenTokenSpy.getCall(0).args[2];
+          issueCode = codeTokenSpy.getCall(0).args[2];
           done();
         })
         .catch(done);
     });
     
-    it('should issue ID token', function(done) {
+    it('should issue authorization code', function(done) {
       var client = {
         id: 's6BhdRkqt3',
         name: 'My Example Client'
@@ -290,32 +290,33 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         allow: true
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.com/cb',
         state: 'xyz'
       }
       
-      issueIDToken(client, user, ares, areq, { accessToken: '2YotnFZFEjr1zCsicMWpAA' }, {}, function(err, token) {
+      issueCode(client, 'https://client.example.com/cb', user, ares, areq, {}, function(err, code) {
         if (err) { return done(err); }
         
-        expect(idts.issue.callCount).to.equal(1);
-        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
-          user: {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          },
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
           client: {
             id: 's6BhdRkqt3',
             name: 'My Example Client'
+          },
+          redirectURI: 'https://client.example.com/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
           }
         });
-        expect(token).to.equal('eyJhbGci');
+        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
         done();
       });
-    }); // should issue ID token
+    }); // should issue authorization code
     
-    it('should issue ID token with scope', function(done) {
+    it('should issue authorization code with scope', function(done) {
       var client = {
         id: 's6BhdRkqt3',
         name: 'My Example'
@@ -329,33 +330,34 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
       }
       
-      issueIDToken(client, user, ares, areq, { accessToken: '2YotnFZFEjr1zCsicMWpAA' }, {}, function(err, token) {
+      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, token) {
         if (err) { return done(err); }
         
-        expect(idts.issue.callCount).to.equal(1);
-        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
-          user: {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          },
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
           client: {
             id: 's6BhdRkqt3',
             name: 'My Example'
           },
+          redirectURI: 'https://client.example.org/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
           scope: [ 'openid', 'profile', 'email' ]
         });
-        expect(token).to.equal('eyJhbGci');
+        expect(token).to.equal('SplxlOBeZQQYbYS6WxSbIA');
         done();
       });
-    }); // should issue ID token with scope
+    }); // should issue authorization code with scope
     
-    it('should issue ID token with issuer', function(done) {
+    it('should issue authorization code with issuer', function(done) {
       var client = {
         id: 's6BhdRkqt3',
         name: 'My Example'
@@ -370,34 +372,35 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         scope: [ 'openid', 'profile', 'email' ]
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
       }
       
-      issueIDToken(client, user, ares, areq, { accessToken: '2YotnFZFEjr1zCsicMWpAA' }, {}, function(err, token) {
+      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, code) {
         if (err) { return done(err); }
         
-        expect(idts.issue.callCount).to.equal(1);
-        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
           issuer: 'https://server.example.com',
-          user: {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          },
           client: {
             id: 's6BhdRkqt3',
             name: 'My Example'
           },
+          redirectURI: 'https://client.example.org/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
           scope: [ 'openid', 'profile', 'email' ]
         });
-        expect(token).to.equal('eyJhbGci');
+        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
         done();
       });
-    }); // should issue ID token with issuer
+    }); // should issue authorization code with issuer
     
-    it('should issue ID token with authentication context', function(done) {
+    it('should issue authorization code with authentication context', function(done) {
       var client = {
         id: 's6BhdRkqt3',
         name: 'My Example'
@@ -418,25 +421,26 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         }
       }
       var areq = {
-        type: 'id_token token',
+        type: 'code token',
         clientID: 's6BhdRkqt3',
         redirectURI: 'https://client.example.org/cb',
         state: 'af0ifjsldkj'
       }
       
-      issueIDToken(client, user, ares, areq, { accessToken: '2YotnFZFEjr1zCsicMWpAA' }, {}, function(err, token) {
+      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, code) {
         if (err) { return done(err); }
         
-        expect(idts.issue.callCount).to.equal(1);
-        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+        expect(acs.issue.callCount).to.equal(1);
+        expect(acs.issue.getCall(0).args[0]).to.deep.equal({
           issuer: 'https://server.example.com',
-          user: {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          },
           client: {
             id: 's6BhdRkqt3',
             name: 'My Example'
+          },
+          redirectURI: 'https://client.example.org/cb',
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
           },
           scope: [ 'openid', 'profile', 'email' ],
           authContext: {
@@ -446,11 +450,11 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
             ]
           }
         });
-        expect(token).to.equal('eyJhbGci');
+        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
         done();
       });
-    }); // should issue ID token with authentication context
+    }); // should issue authorization code with authentication context
     
-  }); // issueIDToken
+  }); // issueCode
   
 });
