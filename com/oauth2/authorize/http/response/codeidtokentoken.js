@@ -29,9 +29,10 @@ exports = module.exports = function(idts, ats, acs, logger, C) {
         var msg = {};
         msg.client = client;
         msg.user = user;
-        msg.grant = ares;
+        //msg.grant = ares;
         // TODO: Pass some indicator that this is an implicit flow, so token lifetimes
         //. can be constrained accordingly
+        if (ares.scope) { msg.scope = ares.scope; }
         
         ats.issue(msg, function(err, token) {
           if (err) { return cb(err); }
