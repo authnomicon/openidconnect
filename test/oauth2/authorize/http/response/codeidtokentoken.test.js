@@ -261,6 +261,73 @@ describe('oauth2/authorize/http/response/codeidtokentoken', function() {
       });
     }); // should issue authorization code with scope
     
-  });
+  }); // issueCode
+  
+  describe('issueIDToken', function() {
+    var container = new Object();
+    container.components = sinon.stub()
+    container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode').returns([]);
+    container.components.withArgs('http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters').returns([]);
+    var idts = new Object();
+    
+    var codeIdTokenTokenSpy = sinon.stub();
+    var factory = $require('../../../../../com/oauth2/authorize/http/response/codeidtokentoken', {
+      'oauth2orize-openid': {
+        grant: { codeIdTokenToken: codeIdTokenTokenSpy }
+      }
+    });
+    
+    var issueIDToken;
+    
+    beforeEach(function(done) {
+      idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
+      
+      factory(idts, null, null, logger, container)
+        .then(function(type) {
+          issueIDToken = codeIdTokenTokenSpy.getCall(0).args[3];
+          done();
+        })
+        .catch(done);
+    });
+    
+    it('should issue ID token', function(done) {
+      var client = {
+        id: 's6BhdRkqt3',
+        name: 'My Example Client'
+      };
+      var user = {
+        id: '248289761001',
+        displayName: 'Jane Doe'
+      };
+      var ares = {
+        allow: true
+      }
+      var areq = {
+        type: 'code id_token token',
+        clientID: 's6BhdRkqt3',
+        redirectURI: 'https://client.example.com/cb',
+        state: 'xyz'
+      }
+      
+      issueIDToken(client, user, ares, areq, {}, {}, function(err, code) {
+        if (err) { return done(err); }
+        
+        expect(idts.issue.callCount).to.equal(1);
+        expect(idts.issue.getCall(0).args[0]).to.deep.equal({
+          user: {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example Client'
+          }
+        });
+        expect(code).to.equal('eyJhbGci');
+        done();
+      });
+    }); // should issue ID token
+    
+  }); // issueIDToken
   
 });

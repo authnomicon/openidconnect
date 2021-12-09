@@ -207,13 +207,13 @@ describe('oauth2/authorize/http/response/codeidtoken', function() {
         
         expect(idts.issue.callCount).to.equal(1);
         expect(idts.issue.getCall(0).args[0]).to.deep.equal({
-          client: {
-            id: 's6BhdRkqt3',
-            name: 'My Example Client'
-          },
           user: {
             id: '248289761001',
             displayName: 'Jane Doe'
+          },
+          client: {
+            id: 's6BhdRkqt3',
+            name: 'My Example Client'
           }
         });
         expect(code).to.equal('eyJhbGci');
