@@ -27,8 +27,8 @@ exports = module.exports = function(idts, logger, C) {
         modes: modes
       }, function(client, user, ares, areq, bound, locals, cb) {
         var msg = {};
-        msg.client = client;
         msg.user = user;
+        msg.client = client;
         
         idts.issue(msg, function(err, token) {
           if (err) { return cb(err); }

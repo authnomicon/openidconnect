@@ -200,7 +200,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
         state: 'xyz'
       }
       
-      issueIDToken(client, user, ares, areq, {}, {}, function(err, code) {
+      issueIDToken(client, user, ares, areq, {}, {}, function(err, token) {
         if (err) { return done(err); }
         
         expect(idts.issue.callCount).to.equal(1);
@@ -214,7 +214,7 @@ describe('oauth2/authorize/http/response/idtokentoken', function() {
             name: 'My Example Client'
           }
         });
-        expect(code).to.equal('eyJhbGci');
+        expect(token).to.equal('eyJhbGci');
         done();
       });
     }); // should issue ID token

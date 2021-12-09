@@ -240,7 +240,7 @@ describe('oauth2/authorize/http/response/codetoken', function() {
         state: 'af0ifjsldkj'
       }
       
-      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, code) {
+      issueCode(client, 'https://client.example.org/cb', user, ares, areq, {}, function(err, token) {
         if (err) { return done(err); }
         
         expect(acs.issue.callCount).to.equal(1);
@@ -256,7 +256,7 @@ describe('oauth2/authorize/http/response/codetoken', function() {
           },
           scope: [ 'openid', 'profile', 'email' ]
         });
-        expect(code).to.equal('SplxlOBeZQQYbYS6WxSbIA');
+        expect(token).to.equal('SplxlOBeZQQYbYS6WxSbIA');
         done();
       });
     }); // should issue authorization code with scope
