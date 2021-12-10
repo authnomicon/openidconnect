@@ -73,7 +73,7 @@ exports = module.exports = function(idts, ats, acs, logger, C) {
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'code id_token token';
 exports['@require'] = [
-  '../../../../sts/id',
+  '../../../../../sts/id',
   'http://i.authnomicon.org/oauth2/AccessTokenService',
   'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
   'http://i.bixbyjs.org/Logger',
