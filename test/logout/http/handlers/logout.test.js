@@ -26,26 +26,17 @@ describe('logout/http/handlers/logout', function() {
     };
   }
   
-  function session() {
-    return function(req, res, next) {
-      next();
-    };
-  }
-  
   it('should create handler', function() {
     var service = function(){};
     var clientDirectory = new Object();
     var idTokenService = new Object();
     var authenticateSpy = sinon.spy(authenticate);
     var stateSpy = sinon.spy(state);
-    var sessionSpy = sinon.spy(session);
     
-    var handler = factory(null, service, clientDirectory, idTokenService, authenticateSpy, stateSpy, sessionSpy);
+    var handler = factory(null, service, clientDirectory, idTokenService, authenticateSpy, stateSpy);
     
-    expect(sessionSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledWithExactly({ external: true });
-    expect(stateSpy).to.be.calledAfter(sessionSpy);
     expect(authenticateSpy).to.be.calledOnce;
     expect(authenticateSpy).to.be.calledWithExactly('anonymous');
     expect(authenticateSpy).to.be.calledAfter(stateSpy);
@@ -80,7 +71,7 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       
-      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
+      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -136,7 +127,7 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       
-      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state, session);
+      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -182,7 +173,7 @@ describe('logout/http/handlers/logout', function() {
       var clientDirectory = new Object();
       clientDirectory.read = sinon.spy();
       
-      var handler = factory(prompts, service, clientDirectory, idTokenService, authenticate, state, session);
+      var handler = factory(prompts, service, clientDirectory, idTokenService, authenticate, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
