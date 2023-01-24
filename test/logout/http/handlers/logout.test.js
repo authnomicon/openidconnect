@@ -33,7 +33,7 @@ describe('logout/http/handlers/logout', function() {
     var authenticateSpy = sinon.spy(authenticate);
     var stateSpy = sinon.spy(state);
     
-    var handler = factory(null, service, clientDirectory, idTokenService, authenticateSpy, stateSpy);
+    var handler = factory(null, service, clientDirectory, idTokenService, { authenticate: authenticateSpy }, stateSpy);
     
     expect(stateSpy).to.be.calledOnce;
     expect(stateSpy).to.be.calledWithExactly({ external: true });
@@ -71,7 +71,7 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       
-      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state);
+      var handler = factory(null, service, clientDirectory, idTokenService, { authenticate: authenticate }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -127,7 +127,7 @@ describe('logout/http/handlers/logout', function() {
         issued: new Date(1311280970 * 1000)
       });
       
-      var handler = factory(null, service, clientDirectory, idTokenService, authenticate, state);
+      var handler = factory(null, service, clientDirectory, idTokenService, { authenticate: authenticate }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -173,7 +173,7 @@ describe('logout/http/handlers/logout', function() {
       var clientDirectory = new Object();
       clientDirectory.read = sinon.spy();
       
-      var handler = factory(prompts, service, clientDirectory, idTokenService, authenticate, state);
+      var handler = factory(prompts, service, clientDirectory, idTokenService, { authenticate: authenticate }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
