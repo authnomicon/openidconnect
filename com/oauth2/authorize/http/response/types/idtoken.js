@@ -1,7 +1,7 @@
-exports = module.exports = function(container, idts, ats, logger) {
+exports = module.exports = function(idts, logger, C) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
+  var modeComps = C.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -20,27 +20,18 @@ exports = module.exports = function(container, idts, ats, logger) {
         }
         
         modes[name] = mode;
-        logger.info('Loaded response mode for OpenID Connect implicit \"id_token token\" flow: ' + name);
+        logger.info('Loaded response mode for OpenID Connect implicit \"id_token\" flow: ' + name);
       });
       
-      return openid.grant.idTokenToken({
+      return openid.grant.idToken({
         modes: modes
-      }, function(client, user, ares, areq, locals, cb) {
+      }, function(client, user, ares, areq, bind, locals, cb) {
         var msg = {};
-        msg.client = client;
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.user = user;
-        msg.grant = ares;
-        // TODO: Pass some indicator that this is an implicit flow, so token lifetimes
-        //. can be constrained accordingly
-        
-        ats.issue(msg, function(err, token) {
-          if (err) { return cb(err); }
-          return cb(null, token);
-        });
-      }, function(client, user, ares, areq, bound, locals, cb) {
-        var msg = {};
         msg.client = client;
-        msg.user = user;
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         idts.issue(msg, function(err, token) {
           if (err) { return cb(err); }
@@ -51,10 +42,9 @@ exports = module.exports = function(container, idts, ats, logger) {
 };
 
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
-exports['@type'] = 'id_token token';
+exports['@type'] = 'id_token';
 exports['@require'] = [
-  '!container',
-  '../../../../sts/id',
-  'http://i.authnomicon.org/oauth2/AccessTokenService',
-  'http://i.bixbyjs.org/Logger'
+  '../../../../../sts/id',
+  'http://i.bixbyjs.org/Logger',
+  '!container'
 ];

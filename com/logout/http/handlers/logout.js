@@ -1,4 +1,4 @@
-exports = module.exports = function(service, prompts, idts, clients, authenticate, state, session) {
+exports = module.exports = function(prompts, service, clients, idts, authenticator, store) {
   var url = require('url');
   
   var Request = require('../../../../lib/logout/request')
@@ -94,10 +94,12 @@ exports = module.exports = function(service, prompts, idts, clients, authenticat
     service(loreq, lores);
   }
   
+  
   return [
-    session(),
-    state({ external: true }),
-    authenticate('anonymous'),
+    //state({ external: true }),
+    require('flowstate')({ external: true, store: store }),
+    // TODO: authenticate session???  probably not because could be logged out, and still want to llow client
+    authenticator.authenticate('anonymous'),
     verifyIDToken,
     validateClient,
     logout,
@@ -107,11 +109,10 @@ exports = module.exports = function(service, prompts, idts, clients, authenticat
 };
 
 exports['@require'] = [
-  '../../service',
   'http://i.authnomicon.org/prompts/http/Router',
-  '../../../sts/id',
+  '../../service',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state',
-  'http://i.bixbyjs.org/http/middleware/session'
+  '../../../sts/id',
+  'module:@authnomicon/session.Authenticator',
+  'module:flowstate.Store'
 ];

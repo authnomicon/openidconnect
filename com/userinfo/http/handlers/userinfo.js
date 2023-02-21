@@ -1,6 +1,6 @@
-exports = module.exports = function(authenticate, users) {
+exports = module.exports = function(authenticator, users) {
   return [
-    authenticate([ 'bearer' ]),
+    authenticator.authenticate([ 'bearer' ]),
     function(req, res, next) {
       users.read(req.user.id, function(err, user) {
         // TODO: Respect scope here
@@ -28,6 +28,6 @@ exports = module.exports = function(authenticate, users) {
 };
 
 exports['@require'] = [
-  'http://i.bixbyjs.org/http/middleware/authenticate',
+  'module:bixby-express.Authenticator',
   'http://i.authnomicon.org/Directory'
 ];

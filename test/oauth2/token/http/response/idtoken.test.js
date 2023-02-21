@@ -17,21 +17,20 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var txn = {
-      type: 'authorization_code',
+    var msg = {
       user: {
         id: '248289761001'
       },
       client: {
         id: 's6BhdRkqt3',
-        name: 'Example Client',
+        name: 'My Example',
         redirectURIs: [ 'https://client.example.org/cb' ]
       },
       scope: [ 'openid', 'profile', 'email' ]
     }
     
     var extend = factory(idts);
-    extend(txn, function(err, params) {
+    extend(msg, {}, 'authorization_code', function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.be.calledOnce;
@@ -41,7 +40,7 @@ describe('oauth2/token/http/response/idtoken', function() {
         },
         client: {
           id: 's6BhdRkqt3',
-          name: 'Example Client',
+          name: 'My Example',
           redirectURIs: [ 'https://client.example.org/cb' ]
         },
         scope: [ 'openid', 'profile', 'email' ]
@@ -55,20 +54,19 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var txn = {
-      type: 'password',
+    var msg = {
       user: {
         id: '248289761001'
       },
       client: {
         id: 's6BhdRkqt3',
-        name: 'Example Client',
+        name: 'My Example Client',
         redirectURIs: [ 'https://client.example.com/cb' ]
       }
     }
     
     var extend = factory(idts);
-    extend(txn, function(err, params) {
+    extend(msg, {}, 'password', function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;
@@ -81,20 +79,19 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var txn = {
-      type: 'authorization_code',
+    var msg = {
       user: {
         id: '248289761001'
       },
       client: {
         id: 's6BhdRkqt3',
-        name: 'Example Client',
+        name: 'My Example Client',
         redirectURIs: [ 'https://client.example.com/cb' ]
       }
     }
     
     var extend = factory(idts);
-    extend(txn, function(err, params) {
+    extend(msg, {}, 'authorization_code', function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;
@@ -107,21 +104,20 @@ describe('oauth2/token/http/response/idtoken', function() {
     var idts = new Object();
     idts.issue = sinon.stub().yieldsAsync(null, 'eyJhbGci');
     
-    var txn = {
-      type: 'authorization_code',
+    var msg = {
       user: {
         id: '248289761001'
       },
       client: {
         id: 's6BhdRkqt3',
-        name: 'Example Client',
+        name: 'My Example Client',
         redirectURIs: [ 'https://client.example.com/cb' ]
       },
       scope: [ 'profile', 'email' ]
     }
     
     var extend = factory(idts);
-    extend(txn, function(err, params) {
+    extend(msg, {}, 'authorization_code', function(err, params) {
       if (err) { return done(err); }
       
       expect(idts.issue).to.not.be.called;

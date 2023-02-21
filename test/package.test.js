@@ -13,11 +13,11 @@ describe('@authnomicon/openidconnect', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/openidconnect');
       expect(json.assembly.components).to.deep.equal([
         'oauth2/authorize/http/request/openid',
-        'oauth2/authorize/http/response/idtoken',
-        'oauth2/authorize/http/response/codetoken',
-        'oauth2/authorize/http/response/codeidtoken',
-        'oauth2/authorize/http/response/idtokentoken',
-        'oauth2/authorize/http/response/codeidtokentoken',
+        'oauth2/authorize/http/response/types/codetoken',
+        'oauth2/authorize/http/response/types/codeidtokentoken',
+        'oauth2/authorize/http/response/types/codeidtoken',
+        'oauth2/authorize/http/response/types/idtoken',
+        'oauth2/authorize/http/response/types/idtokentoken',
         'oauth2/authorize/http/response/sessionstate',
         'oauth2/token/http/response/idtoken',
         'userinfo/http/service',

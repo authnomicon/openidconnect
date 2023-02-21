@@ -1,3 +1,5 @@
+// https://openid.net/specs/openid-connect-rpinitiated-1_0.html
+
 exports = module.exports = function(logoutHandler) {
   var express = require('express');
   

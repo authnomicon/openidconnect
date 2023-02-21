@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2021-12-15
+### Added
+- Added `issuer` property to `msg` argument passed to `IDTokenService#issue()`.
+- Added `scope` property to `msg` argument passed to `IDTokenService#issue()`.
+- Added `authContext` property to `msg` argument passed to `IDTokenService#issue()`.
+- Added `issuer` property to `msg` argument passed to `AccessTokenService#issue()`.
+- Added `authContext` property to `msg` argument passed to `AccessTokenService#issue()`.
+- Added `issuer` property to `msg` argument passed to `AuthorizationCodeService#issue()`.
+- Added `authContext` property to `msg` argument passed to `AuthorizationCodeService#issue()`.
+
+### Changed
+- `AccessTokenService#issue()` is called with `msg` argument containing `scope`
+property, rather than `grant.scope`.
+- `AuthorizationCodeService#issue()` is called with `msg` argument containing
+`scope` property, rather than `grant.scope`.
+- Changed ID Token token response parameter extension to 4-arity form, in
+accordance with latest changes in `@authnomicon/oauth2`.
+
 ## [0.0.3] - 2021-12-02
 ### Added
 - Added `email` claim to ID token.

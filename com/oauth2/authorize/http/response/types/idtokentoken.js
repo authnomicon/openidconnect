@@ -1,7 +1,7 @@
-exports = module.exports = function(container, idts, ats, acs, logger) {
+exports = module.exports = function(idts, ats, logger, C) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
+  var modeComps = C.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -20,38 +20,33 @@ exports = module.exports = function(container, idts, ats, acs, logger) {
         }
         
         modes[name] = mode;
-        logger.info('Loaded response mode for OpenID Connect hybrid \"code id_token token\" flow: ' + name);
+        logger.info('Loaded response mode for OpenID Connect implicit \"id_token token\" flow: ' + name);
       });
       
-      return openid.grant.codeIdTokenToken({
+      return openid.grant.idTokenToken({
         modes: modes
       }, function(client, user, ares, areq, locals, cb) {
         var msg = {};
-        msg.client = client;
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.user = user;
-        msg.grant = ares;
+        msg.client = client;
+        //msg.grant = ares;
         // TODO: Pass some indicator that this is an implicit flow, so token lifetimes
         //. can be constrained accordingly
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         ats.issue(msg, function(err, token) {
           if (err) { return cb(err); }
           return cb(null, token);
         });
-      }, function(client, redirectURI, user, ares, areq, locals, cb) {
+      }, function(client, user, ares, areq, bind, locals, cb) {
         var msg = {};
-        msg.client = client;
-        msg.redirectURI = redirectURI;
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.user = user;
-        msg.grant = ares;
-        
-        acs.issue(msg, function(err, code) {
-          if (err) { return cb(err); }
-          return cb(null, code);
-        });
-      }, function(client, user, ares, areq, bound, locals, cb) {
-        var msg = {};
         msg.client = client;
-        msg.user = user;
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         idts.issue(msg, function(err, token) {
           if (err) { return cb(err); }
@@ -62,11 +57,10 @@ exports = module.exports = function(container, idts, ats, acs, logger) {
 };
 
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
-exports['@type'] = 'code id_token token';
+exports['@type'] = 'id_token token';
 exports['@require'] = [
-  '!container',
-  '../../../../sts/id',
+  '../../../../../sts/id',
   'http://i.authnomicon.org/oauth2/AccessTokenService',
-  'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
-  'http://i.bixbyjs.org/Logger'
+  'http://i.bixbyjs.org/Logger',
+  '!container'
 ];

@@ -1,19 +1,15 @@
 exports = module.exports = function(idts) {
+  var merge = require('utils-merge');
   
-  return function id_token(txn, cb) {
-    if (txn.type !== 'authorization_code') { return cb(null); }
-    if (!txn.scope || txn.scope.indexOf('openid') === -1) { return cb(null); }
+  return function id_token(msg, bind, grant, cb) {
+    if (grant !== 'authorization_code') { return cb(null); }
+    if (!msg.scope || msg.scope.indexOf('openid') === -1) { return cb(null); }
     
-    var msg = {};
-    if (txn.issuer) { msg.issuer = txn.issuer; }
-    msg.user = txn.user;
-    msg.client = txn.client;
-    if (txn.scope) { msg.scope = txn.scope; }
-    if (txn.authContext) { msg.authContext = txn.authContext; }
+    var idmsg = merge({}, msg);
     
-    // TODO: Add scope to the message, so user claims can be filtered
+    // TODO: Bind access token, if available
     
-    idts.issue(msg, function(err, token) {
+    idts.issue(idmsg, function(err, token) {
       if (err) { return cb(err); }
       return cb(null, { id_token: token });
     });

@@ -1,7 +1,7 @@
-exports = module.exports = function(container, idts, acs, logger) {
+exports = module.exports = function(idts, acs, logger, C) {
   var openid = require('oauth2orize-openid');
   
-  var modeComps = container.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
+  var modeComps = C.components('http://i.authnomicon.org/oauth2/authorization/http/ResponseMode');
   return Promise.all(modeComps.map(function(comp) { return comp.create(); } ))
     .then(function(plugins) {
       var modes = {}
@@ -27,19 +27,25 @@ exports = module.exports = function(container, idts, acs, logger) {
         modes: modes
       }, function(client, redirectURI, user, ares, areq, locals, cb) {
         var msg = {};
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.client = client;
         msg.redirectURI = redirectURI;
         msg.user = user;
-        msg.grant = ares;
+        //msg.grant = ares;
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         acs.issue(msg, function(err, code) {
           if (err) { return cb(err); }
           return cb(null, code);
         });
-      }, function(client, user, ares, areq, bound, locals, cb) {
+      }, function(client, user, ares, areq, bind, locals, cb) {
         var msg = {};
-        msg.client = client;
+        if (ares.issuer) { msg.issuer = ares.issuer; }
         msg.user = user;
+        msg.client = client;
+        if (ares.scope) { msg.scope = ares.scope; }
+        if (ares.authContext) { msg.authContext = ares.authContext; }
         
         idts.issue(msg, function(err, token) {
           if (err) { return cb(err); }
@@ -52,8 +58,8 @@ exports = module.exports = function(container, idts, acs, logger) {
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
 exports['@type'] = 'code id_token';
 exports['@require'] = [
-  '!container',
-  '../../../../sts/id',
+  '../../../../../sts/id',
   'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
-  'http://i.bixbyjs.org/Logger'
+  'http://i.bixbyjs.org/Logger',
+  '!container'
 ];
