@@ -9,7 +9,7 @@ var factory = require('../../../../../../com/oauth2/authorize/http/response/type
 describe('oauth2/authorize/http/response/types/idtokentoken', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/oauth2/authorization/http/ResponseType');
+    expect(factory['@implements']).to.equal('module:oauth2orize.RequestProcessor');
     expect(factory['@type']).to.equal('id_token token');
   });
   

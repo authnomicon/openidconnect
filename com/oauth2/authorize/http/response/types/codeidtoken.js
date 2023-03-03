@@ -55,7 +55,7 @@ exports = module.exports = function(idts, acs, logger, C) {
     });
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseType';
+exports['@implements'] = 'module:oauth2orize.RequestProcessor';
 exports['@type'] = 'code id_token';
 exports['@require'] = [
   '../../../../../sts/id',
