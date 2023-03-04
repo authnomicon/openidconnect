@@ -8,7 +8,7 @@ var factory = require('../../../../../com/oauth2/token/http/response/idtoken');
 describe('oauth2/token/http/response/idtoken', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/oauth2/token/http/ResponseParameters');
+    expect(factory['@implements']).to.equal('module:@authnomicon/oauth2.tokenResponseParametersFn');
     expect(factory['@singleton']).to.be.undefined;
   });
   

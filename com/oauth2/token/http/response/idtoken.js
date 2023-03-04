@@ -1,6 +1,7 @@
 exports = module.exports = function(idts) {
   var merge = require('utils-merge');
   
+  // TODO: Eliminate the grant argument here, and make it an annotation.
   return function id_token(msg, bind, grant, cb) {
     if (grant !== 'authorization_code') { return cb(null); }
     if (!msg.scope || msg.scope.indexOf('openid') === -1) { return cb(null); }
@@ -16,7 +17,7 @@ exports = module.exports = function(idts) {
   }
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/oauth2/token/http/ResponseParameters';
+exports['@implements'] = 'module:@authnomicon/oauth2.tokenResponseParametersFn';
 exports['@require'] = [
   '../../../../sts/id',
 ];
