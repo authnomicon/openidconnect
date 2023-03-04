@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 interface to `module:oauth2orize.RequestProcessor`.
 - Renamed `http://i.authnomicon.org/oauth2/authorization/http/RequestParameters`
 interface to `module:oauth2orize.RequestParametersProcessor`.
+- Renamed `http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters`
+to `module:oauth2orize.responseParametersFn`.
 
 ## [0.0.4] - 2021-12-15
 ### Added

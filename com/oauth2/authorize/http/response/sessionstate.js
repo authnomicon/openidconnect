@@ -23,7 +23,7 @@ exports = module.exports = function(idts) {
   }
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/oauth2/authorization/http/ResponseParameters';
+exports['@implements'] = 'module:oauth2orize.responseParametersFn';
 exports['@require'] = [
   '../../../../sts/id',
 ];
