@@ -59,7 +59,7 @@ exports['@implements'] = 'module:oauth2orize.RequestProcessor';
 exports['@type'] = 'code id_token';
 exports['@require'] = [
   '../../../../../sts/id',
-  'http://i.authnomicon.org/oauth2/AuthorizationCodeService',
+  'module:@authnomicon/oauth2.AuthorizationCodeService',
   'http://i.bixbyjs.org/Logger',
   '!container'
 ];

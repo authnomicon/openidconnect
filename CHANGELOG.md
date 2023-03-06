@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Renamed `http://i.authnomicon.org/oauth2/AuthorizationCodeService` interface
+to `module:@authnomicon/oauth2.AuthorizationCodeService`.
+- Renamed `http://i.authnomicon.org/oauth2/AccessTokenService` interface to
+`module:@authnomicon/oauth2.AccessTokenService`.
 - Renamed `http://i.authnomicon.org/oauth2/authorization/http/ResponseType`
 interface to `module:oauth2orize.RequestProcessor`.
 - Renamed `http://i.authnomicon.org/oauth2/authorization/http/RequestParameters`
