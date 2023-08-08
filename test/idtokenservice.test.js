@@ -2,10 +2,10 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../com/sts/id/default');
+var factory = require('../com/idtokenservice');
 
 
-describe('sts/id/default', function() {
+describe('idtokenservice', function() {
   var clock;
   
   beforeEach(function() {

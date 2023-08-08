@@ -34,6 +34,7 @@
   "assembly": {
     "namespace": "org.authnomicon/openidconnect",
     "components": [
+      "idtokenservice",
       "oauth2/authorize/http/request/openid",
       "oauth2/authorize/http/response/types/codetoken",
       "oauth2/authorize/http/response/types/codeidtokentoken",
@@ -44,8 +45,7 @@
       "oauth2/token/http/response/idtoken",
       "userinfo/http/service",
       "logout/http/service",
-      "session/http/service",
-      "sts/id/default"
+      "session/http/service"
     ]
   },
   "directories": {

@@ -12,6 +12,7 @@ describe('@authnomicon/openidconnect', function() {
     it('should have assembly metadata', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/openidconnect');
       expect(json.assembly.components).to.deep.equal([
+        'idtokenservice',
         'oauth2/authorize/http/request/openid',
         'oauth2/authorize/http/response/types/codetoken',
         'oauth2/authorize/http/response/types/codeidtokentoken',
@@ -22,8 +23,7 @@ describe('@authnomicon/openidconnect', function() {
         'oauth2/token/http/response/idtoken',
         'userinfo/http/service',
         'logout/http/service',
-        'session/http/service',
-        'sts/id/default'
+        'session/http/service'
       ]);
     });
   });
