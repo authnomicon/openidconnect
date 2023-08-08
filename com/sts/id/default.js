@@ -76,6 +76,7 @@ exports = module.exports = function(directory, vault, jwt) {
 };
 
 exports['@singleton'] = true;
+exports['@implements'] = 'module:@authnomicon/openidconnect.IDTokenService';
 exports['@require'] = [
   'module:@authnomicon/core.Directory',
   'http://i.authnomicon.org/openidconnect/credentials/KeyVault',

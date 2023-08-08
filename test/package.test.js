@@ -22,7 +22,8 @@ describe('@authnomicon/openidconnect', function() {
         'oauth2/token/http/response/idtoken',
         'userinfo/http/service',
         'logout/http/service',
-        'session/http/service'
+        'session/http/service',
+        'sts/id/default'
       ]);
     });
   });

@@ -18,5 +18,5 @@ exports = module.exports = function(idts) {
 
 exports['@implements'] = 'module:@authnomicon/oauth2.tokenResponseParametersFn;grant_type=code';
 exports['@require'] = [
-  '../../../../sts/id',
+  'module:@authnomicon/openidconnect.IDTokenService',
 ];
