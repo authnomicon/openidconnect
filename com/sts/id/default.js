@@ -77,7 +77,7 @@ exports = module.exports = function(directory, vault, jwt) {
 
 exports['@singleton'] = true;
 exports['@require'] = [
-  'http://i.authnomicon.org/Directory',
+  'module:@authnomicon/core.Directory',
   'http://i.authnomicon.org/openidconnect/credentials/KeyVault',
   'http://i.bixbyjs.org/jose/jwt'
 ];
