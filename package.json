@@ -54,6 +54,7 @@
   "dependencies": {
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "flowstate": "^0.6.0",
     "oauth2orize-openid": "^0.4.1",
     "uid-safe": "^2.1.5",
     "utils-merge": "^1.0.1"
