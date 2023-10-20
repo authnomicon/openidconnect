@@ -1,6 +1,6 @@
 {
   "name": "@authnomicon/openidconnect",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "OpenID Connect components for the Authnomicon project.",
   "keywords": [
     "openid",
