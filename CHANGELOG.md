@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2023-11-01
+### Changed
+
+- ID token service preferentially uses `ISSUER` environment variable as value of
+`iss` claim.
+
 ## [0.0.5] - 2023-10-20
 
 TODO: Review this for accuracy.
