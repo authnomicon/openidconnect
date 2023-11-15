@@ -8,7 +8,7 @@ exports = module.exports = function(directory, vault, jwt) {
         if (err) { return next(err); }
       
         var claims = {
-          iss: msg.issuer,
+          iss: process.env['ISSUER'] || msg.issuer,
           sub: user.id,
           aud: msg.client.id
         };
