@@ -99,7 +99,8 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
     //state({ external: true }),
     require('flowstate')({ external: true, store: store }),
     // TODO: authenticate session???  probably not because could be logged out, and still want to llow client
-    authenticator.authenticate('anonymous'),
+    //authenticator.authenticate('anonymous'),
+    authenticator.authenticate('session'),
     verifyIDToken,
     validateClient,
     logout,
@@ -112,7 +113,7 @@ exports['@require'] = [
   'http://i.authnomicon.org/prompts/http/Router',
   '../../service',
   'http://i.authnomicon.org/openidconnect/ClientDirectory',
-  '../../../sts/id',
-  'module:@authnomicon/session.Authenticator',
+  'module:@authnomicon/openidconnect.IDTokenService',
+  'module:passport.Authenticator',
   'module:flowstate.Store'
 ];
