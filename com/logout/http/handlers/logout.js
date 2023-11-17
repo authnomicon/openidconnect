@@ -101,6 +101,7 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
     //state({ external: true }),
     require('flowstate')({ external: true, store: store }),
     // TODO: authenticate session???  probably not because could be logged out, and still want to llow client
+    // TODO: probably authenticate both session and anon
     //authenticator.authenticate('anonymous'),
     authenticator.authenticate('session'),
     verifyIDToken,

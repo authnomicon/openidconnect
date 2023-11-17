@@ -29,7 +29,7 @@ describe('logout/http/handlers/logout', function() {
     var handler = factory(null, service, clientDirectory, idTokenService, { authenticate: authenticateSpy });
     
     expect(authenticateSpy).to.be.calledOnce;
-    expect(authenticateSpy).to.be.calledWithExactly('anonymous');
+    expect(authenticateSpy).to.be.calledWithExactly('session');
   });
   
   describe('handler', function() {
