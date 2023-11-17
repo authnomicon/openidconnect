@@ -27,6 +27,9 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
     var postLogoutRedirectURI = req.query.post_logout_redirect_uri;
     var idToken = res.locals.idToken;
     
+    // TODO: use client_id in request here
+    
+    
     clients.read(idToken.client.id, function(err, client) {
       if (err) { return next(err); }
       
@@ -62,6 +65,46 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
   }
   
   function handle(req, res, next) {
+    var sloReq = new aaa.Request(res.locals.client);
+    
+    service(sloReq, function(err, sloRes) {
+      console.log('SERVICED!');
+      console.log(err);
+      console.log(sloRes);
+      
+      if (sloRes.allow === true) {
+        console.log('TODO: real log out');
+        console.log(req.state);
+        console.log(req.query);
+        
+        // NOTE: pushing state in order to have a return_to set to an external url
+        
+        
+        console.log('PUSHING STATE');
+        console.log(res.locals.postLogoutRedirectURI);
+        console.log(req.query.post_logout_redirect_uri);
+        
+        var state = {
+          foo: 'bar',
+          //returnTo: 'http://www.example.com/foo'
+          // FIXME: add the locals version, which is verified by server
+          returnTo: req.query.post_logout_redirect_uri,
+          state: req.query.state
+        }
+        
+        // TODO: make a convienience funciton in flowstate to do this automatically.
+        req.pushState(state, '/logout');
+        // TODO: querystringify these params
+        res.redirect('/logout?csrf_token=' + req.csrfToken());
+      } else {
+        console.log('challenge logout: ' + sloRes.prompt);
+        prompts.dispatch(sloRes.prompt, req, res, next);
+      }
+    });
+    
+    
+    return;
+    
     var loreq = new Request(res.locals.client)
       , lores = new Response();
   
@@ -98,6 +141,8 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
   
   
   return [
+    // TODO: for POST requests, ignore CSRF.  Just here to generate a token for redirect to /logout
+    require('csurf')(),
     //state({ external: true }),
     require('flowstate')({ external: true, store: store }),
     // TODO: authenticate session???  probably not because could be logged out, and still want to llow client
