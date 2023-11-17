@@ -52,6 +52,7 @@
     "com": "com"
   },
   "dependencies": {
+    "aaatrio": "^0.0.2",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "flowstate": "^0.6.0",

@@ -1,3 +1,5 @@
+var aaa = require('aaatrio');
+
 exports = module.exports = function(prompts, service, clients, idts, authenticator, store) {
   var url = require('url');
   
