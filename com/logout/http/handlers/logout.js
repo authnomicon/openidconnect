@@ -68,21 +68,9 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
     var sloReq = new aaa.Request(res.locals.client);
     
     service(sloReq, function(err, sloRes) {
-      console.log('SERVICED!');
-      console.log(err);
-      console.log(sloRes);
-      
       if (sloRes.allow === true) {
-        console.log('TODO: real log out');
-        console.log(req.state);
-        console.log(req.query);
-        
         // NOTE: pushing state in order to have a return_to set to an external url
         
-        
-        console.log('PUSHING STATE');
-        console.log(res.locals.postLogoutRedirectURI);
-        console.log(req.query.post_logout_redirect_uri);
         
         var state = {
           foo: 'bar',
@@ -97,7 +85,6 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
         // TODO: querystringify these params
         res.redirect('/logout?csrf_token=' + req.csrfToken());
       } else {
-        console.log('challenge logout: ' + sloRes.prompt);
         prompts.dispatch(sloRes.prompt, req, res, next);
       }
     });
