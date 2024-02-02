@@ -28,6 +28,6 @@ exports = module.exports = function(authenticator, users) {
 };
 
 exports['@require'] = [
-  'module:bixby-express.Authenticator',
-  'http://i.authnomicon.org/Directory'
+  'module:passport.Authenticator',
+  'module:@authnomicon/core.Directory'
 ];
