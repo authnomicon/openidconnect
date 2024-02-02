@@ -35,6 +35,7 @@
     "namespace": "org.authnomicon/openidconnect",
     "components": [
       "idtokenservice",
+      "configuration/service",
       "oauth2/authorize/http/request/openid",
       "oauth2/authorize/http/response/types/codetoken",
       "oauth2/authorize/http/response/types/codeidtokentoken",
