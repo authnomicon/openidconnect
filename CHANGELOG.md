@@ -5,10 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.0.10] - 2024-02-02
 ### Fixed
 - UserInfo endpoint correctly `@require`s `module:passport.Authenticator` and
 `module:@authnomicon/core.Directory` interfaces.
-
 
 ## [0.0.9] - 2024-02-02
 ### Added
@@ -85,7 +86,8 @@ endpoint.
 
 - Initial release.
 
-[Unreleased]: https://github.com/authnomicon/openidconnect/compare/v0.0.9...HEAD
+[Unreleased]: https://github.com/authnomicon/openidconnect/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/authnomicon/openidconnect/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/authnomicon/openidconnect/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/authnomicon/openidconnect/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/authnomicon/openidconnect/compare/v0.0.6...v0.0.7
