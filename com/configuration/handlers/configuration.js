@@ -9,7 +9,8 @@ exports = module.exports = function() {
       issuer: issuer,
       authorization_endpoint: url.resolve(issuer, '/oauth2/authorize'),
       token_endpoint: url.resolve(issuer, '/oauth2/token'),
-      userinfo_endpoint: url.resolve(issuer, '/openidconnect/userinfo')
+      userinfo_endpoint: url.resolve(issuer, '/openidconnect/userinfo'),
+      jwks_uri: url.resolve(issuer, '/openidconnect/jwks')
     };
     res.json(conf);
   }
