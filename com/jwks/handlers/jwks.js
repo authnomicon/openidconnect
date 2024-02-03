@@ -10,6 +10,10 @@ exports = module.exports = function(vault) {
       
       jose.exportJWK(publicKey)
         .then(function(jwk) {
+          jwk.kid = publicKey.id;
+          // FIXME: don't hardcode this
+          jwk.use = 'sig';
+          
           keys.push(jwk)
           res.json({ keys: keys });
         })
