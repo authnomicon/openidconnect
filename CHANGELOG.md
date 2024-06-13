@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renamed `http://i.authnomicon.org/openidconnect/ClientDirectory` interface
 to `module:@authnomicon/oauth2.ClientDirectory`.
+-- Renamed `http://i.authnomicon.org/prompts/http/Router` interface
+to `module:@authnomicon/prompts.Router`.
 
 ## [0.0.11] - 2024-02-02
 ### Added

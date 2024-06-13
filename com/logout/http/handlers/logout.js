@@ -145,7 +145,7 @@ exports = module.exports = function(prompts, service, clients, idts, authenticat
 };
 
 exports['@require'] = [
-  'http://i.authnomicon.org/prompts/http/Router',
+  'module:@authnomicon/prompts.Router',
   '../../service',
   'module:@authnomicon/oauth2.ClientDirectory',
   'module:@authnomicon/openidconnect.IDTokenService',
